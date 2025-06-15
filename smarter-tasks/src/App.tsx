@@ -1,11 +1,10 @@
-import Task from "./Task";
+import TaskApp from "./TaskApp";
 
 function App() {
 	return (
-		<div className="App text-3xl font-bold bg-blue-500">
-			<Task />
+		<div className="App">
+			<TaskApp />
 		</div>
 	);
 }
-
 export default App;
