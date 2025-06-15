@@ -1,25 +1,41 @@
 import React, { useEffect } from "react";
-// import { TaskItem } from "./types";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
-interface TaskAppState {
-	tasks: TaskItem[];
-}
+import { useLocalStorage } from "./hooks/useLocalStorage";
+
 interface TaskItem {
 	title: string;
 	description: string;
-	dueDate: Date;
+	dueDate: string; // ✅ must be string if stored in localStorage
 }
+
 const TaskApp = () => {
-	const [taskAppState, setTaskAppState] = React.useState<TaskAppState>({
+	const [taskAppState, setTaskAppState] = useLocalStorage<{
+		tasks: TaskItem[];
+	}>("tasks", {
 		tasks: [],
 	});
+
 	useEffect(() => {
-		document.title = `You have ${taskAppState.tasks.length} items`;
+		const id = setTimeout(() => {
+			console.log(`Saved ${taskAppState.tasks.length} items to backend...`);
+		}, 5000);
+
+		return () => {
+			console.log("clear or cancel any existing network call");
+			clearTimeout(id);
+		};
 	}, [taskAppState.tasks]);
+
 	const addTask = (task: TaskItem) => {
 		setTaskAppState({ tasks: [...taskAppState.tasks, task] });
 	};
+
+	const deleteTask = (index: number) => {
+		const updatedTasks = taskAppState.tasks.filter((_, i) => i !== index);
+		setTaskAppState({ tasks: updatedTasks });
+	};
+
 	return (
 		<div className="container py-10 max-w-4xl mx-auto">
 			<h1 className="text-3xl mb-2 font-bold text-slate-700">Smarter Tasks</h1>
@@ -33,10 +49,11 @@ const TaskApp = () => {
 						Pending
 					</h1>
 					<TaskForm addTask={addTask} />
-					<TaskList tasks={taskAppState.tasks} />
+					<TaskList tasks={taskAppState.tasks} deleteTask={deleteTask} />
 				</div>
 			</div>
 		</div>
 	);
 };
+
 export default TaskApp;

@@ -3,6 +3,7 @@ import Task from "./Task";
 // import { TaskItem } from "./types";
 interface Props {
 	tasks: TaskItem[];
+	deleteTask: (index: number) => void;
 }
 interface TaskItem {
 	title: string;
@@ -11,15 +12,20 @@ interface TaskItem {
 }
 
 const TaskList = (props: Props) => {
-	const list = props.tasks.map((task, idx) => (
-		<Task
-			key={idx}
-			title={task.title}
-			description={task.description}
-			dueDate={task.dueDate}
-		/>
-	));
-	return <>{list}</>;
+	return (
+		<ul className="list-disc list-inside space-y-2">
+			{props.tasks.map((task, idx) => (
+				<li key={idx}>
+					<Task
+						title={task.title}
+						description={task.description}
+						dueDate={task.dueDate} // pass dueDate as a string
+						onDelete={() => props.deleteTask(idx)}
+					/>
+				</li>
+			))}
+		</ul>
+	);
 };
 
 export default TaskList;
