@@ -1,4 +1,4 @@
 [build]
   base = "smarter-tasks"
-  publish = "smarter-tasks/dist"
+  publish = "/dist"
   command = "npm run build"
