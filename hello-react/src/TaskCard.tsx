@@ -1,3 +1,4 @@
+import React from "react";
 import "./TaskCard.css";
 
 interface TaskCardProps {
@@ -7,13 +8,18 @@ interface TaskCardProps {
 	assigneeName: string;
 }
 
-function TaskCard(props: TaskCardProps) {
+function TaskCard({
+	title,
+	dueDate,
+	completedAtDate,
+	assigneeName,
+}: TaskCardProps) {
 	return (
 		<div className="TaskItem">
-			<div>{props.title}</div>
-			<div>{props.dueDate}</div>
-			<div>{props.completedAtDate}</div>
-			<div>{props.assigneeName}</div>
+			<div>{title}</div>
+			{dueDate && <div>Due on: {dueDate}</div>}
+			{completedAtDate && <div>Completed on: {completedAtDate}</div>}
+			<div>Assignee: {assigneeName}</div>
 		</div>
 	);
 }
