@@ -15,10 +15,10 @@ const Task = (props: TaskProp) => {
 			<p className="text-sm text-slate-500">{props.description}</p>
 			<button
 				onClick={props.onDelete}
-				className="deleteTaskButton ext-red-500 text-sm"
+				className="deleteTaskButton ext-red-500 text-sm color-red border border-red-500 px-2 py-1 rounded-md font-color-red"
 				id="deleteTaskButton"
 			>
-				❌
+				Delete Task
 			</button>
 		</div>
 	);
