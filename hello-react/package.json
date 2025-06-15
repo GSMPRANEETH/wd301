@@ -11,14 +11,17 @@
 		"tailwind:init": "node node_modules/tailwindcss-cli/node_modules/tailwindcss/lib/cli.js init -p"
 	},
 	"dependencies": {
+		"@types/jest": "^29.5.14",
 		"react": "^19.1.0",
-		"react-dom": "^19.1.0"
+		"react-dom": "^19.1.0",
+		"typescript": "^5.8.3"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.25.0",
 		"@tailwindcss/postcss": "^4.1.10",
-		"@types/react": "^19.1.2",
-		"@types/react-dom": "^19.1.2",
+		"@types/node": "^24.0.1",
+		"@types/react": "^19.1.8",
+		"@types/react-dom": "^19.1.6",
 		"@vitejs/plugin-react": "^4.4.1",
 		"autoprefixer": "^10.4.21",
 		"eslint": "^9.25.0",
