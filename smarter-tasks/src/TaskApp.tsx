@@ -8,6 +8,8 @@ interface TaskAppState {
 }
 interface TaskItem {
 	title: string;
+	description: string;
+	dueDate: Date;
 }
 class TaskApp extends React.Component<TaskAppProp, TaskAppState> {
 	constructor(props: TaskAppProp) {

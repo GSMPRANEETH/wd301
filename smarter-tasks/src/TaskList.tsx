@@ -6,13 +6,20 @@ interface Props {
 }
 interface TaskItem {
 	title: string;
+	description: string;
+	dueDate: Date;
 }
 
 interface State {}
 class TaskList extends React.Component<Props, State> {
 	render() {
 		return this.props.tasks.map((task, idx) => (
-			<Task key={idx} title={task.title} />
+			<Task
+				key={idx}
+				title={task.title}
+				description={task.description}
+				dueDate={task.dueDate}
+			/>
 		));
 	}
 }
