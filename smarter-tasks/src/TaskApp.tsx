@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { TaskItem } from "./types";
 import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
@@ -14,6 +14,9 @@ const TaskApp = () => {
 	const [taskAppState, setTaskAppState] = React.useState<TaskAppState>({
 		tasks: [],
 	});
+	useEffect(() => {
+		document.title = `You have ${taskAppState.tasks.length} items`;
+	}, [taskAppState.tasks]);
 	const addTask = (task: TaskItem) => {
 		setTaskAppState({ tasks: [...taskAppState.tasks, task] });
 	};
