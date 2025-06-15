@@ -19,7 +19,7 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
 		this.state = {
 			title: "",
 			description: "",
-			dueDate: new Date(),
+			dueDate: undefined as unknown as Date,
 		};
 	}
 
@@ -68,7 +68,11 @@ class TaskForm extends React.Component<TaskFormProps, TaskFormState> {
 					id="todoDueDate"
 					required
 					onChange={this.dueDateChanged}
-					value={this.state.dueDate.toISOString().split("T")[0]}
+					value={
+						this.state.dueDate
+							? this.state.dueDate.toISOString().split("T")[0]
+							: ""
+					}
 				/>
 				<button type="submit" id="addTaskButton">
 					Add item
