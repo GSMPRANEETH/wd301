@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/pages/projects/NewProject.tsx
-
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useProjectsDispatch } from "../../context/projects/context";
 import { addProject } from "../../context/projects/actions";
+import { useProjectsDispatch } from "../../context/projects/context";
 
 type Inputs = {
 	name: string;
@@ -13,35 +11,37 @@ type Inputs = {
 
 const NewProject = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [error, setError] = useState<string | null>(null); // ✅ error state as string | null
+	// Explicitly type error as string | null
+	const [error, setError] = useState<string | null>(null);
 
+	const dispatchProjects = useProjectsDispatch();
+	// Remove unused `reset`
 	const {
 		register,
 		handleSubmit,
-		reset,
 		formState: { errors },
 	} = useForm<Inputs>();
 
-	const dispatch = useProjectsDispatch();
+	const closeModal = () => {
+		setIsOpen(false);
+		// Optionally clear error when closing modal
+		setError(null);
+	};
 
 	const openModal = () => {
 		setIsOpen(true);
-		setError(null); // reset any previous error
-	};
-
-	const closeModal = () => {
-		setIsOpen(false);
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		const result = await addProject(dispatch, data);
+		const { name } = data;
 
-		if (result.ok) {
-			reset(); // ✅ clear form
-			closeModal(); // ✅ close modal
-			setError(null);
+		const response = await addProject(dispatchProjects, { name });
+
+		if (response.ok) {
+			setIsOpen(false);
 		} else {
-			setError(result.error ?? "Something went wrong"); // ✅ show error message
+			// Handle undefined error by providing a fallback
+			setError(response.error || "Failed to create project");
 		}
 	};
 
@@ -54,7 +54,6 @@ const NewProject = () => {
 			>
 				New Project
 			</button>
-
 			<Transition appear show={isOpen} as={Fragment}>
 				<Dialog as="div" className="relative z-10" onClose={closeModal}>
 					<Transition.Child
@@ -68,7 +67,6 @@ const NewProject = () => {
 					>
 						<div className="fixed inset-0 bg-black bg-opacity-25" />
 					</Transition.Child>
-
 					<div className="fixed inset-0 overflow-y-auto">
 						<div className="flex min-h-full items-center justify-center p-4 text-center">
 							<Transition.Child
@@ -89,6 +87,10 @@ const NewProject = () => {
 									</Dialog.Title>
 									<div className="mt-2">
 										<form onSubmit={handleSubmit(onSubmit)}>
+											{/* Display error with styling */}
+											{error && (
+												<span className="text-red-500 text-sm">{error}</span>
+											)}
 											<input
 												type="text"
 												placeholder="Enter project name..."
@@ -103,21 +105,19 @@ const NewProject = () => {
 													This field is required
 												</span>
 											)}
-											<div className="mt-4 flex justify-end">
-												<button
-													type="button"
-													onClick={closeModal}
-													className="inline-flex justify-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 mr-2"
-												>
-													Cancel
-												</button>
-												<button
-													type="submit"
-													className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-												>
-													Submit
-												</button>
-											</div>
+											<button
+												type="submit"
+												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+											>
+												Submit
+											</button>
+											<button
+												type="button" // Changed from submit to button
+												onClick={closeModal}
+												className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+											>
+												Cancel
+											</button>
 										</form>
 									</div>
 								</Dialog.Panel>
