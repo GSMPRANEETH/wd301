@@ -5,6 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { API_ENDPOINT } from "../../config/constants";
+import { useProjectsDispatch } from "../../context/projects/context";
+import { addProject } from "../../context/projects/actions";
 
 type Inputs = {
 	name: string;
@@ -27,28 +29,16 @@ const NewProject = () => {
 		setIsOpen(false);
 	};
 
+	const dispatch = useProjectsDispatch();
+
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		const { name } = data;
-		const token = localStorage.getItem("authToken") ?? "";
-		try {
-			const response = await fetch(`${API_ENDPOINT}/projects`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({ name }),
-			});
+		const result = await addProject(dispatch, data);
 
-			if (!response.ok) {
-				throw new Error("Failed to create project");
-			}
-
-			const data = await response.json();
-			console.log(data);
-			closeModal(); // Close modal on success
-		} catch (error) {
-			console.error("Operation failed:", error);
+		if (result.ok) {
+			closeModal(); // ✅ close modal
+			reset(); // ✅ clear form
+		} else {
+			console.error("Failed to create project:", result.error);
 		}
 	};
 

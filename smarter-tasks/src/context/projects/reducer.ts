@@ -58,9 +58,11 @@ export const reducer = (
 				errorMessage: action.payload,
 			};
 		case "ADD_PROJECT_SUCCESS":
-			// Here I'll insert new new project object, which is coming in this
-			// `action.payload`, to the `projects` array present in state.
-			return { ...state, projects: [...state.projects, action.payload] };
+			return {
+				...state,
+				projects: [...state.projects, action.payload],
+			};
+
 		default:
 			return state;
 	}

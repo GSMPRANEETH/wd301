@@ -45,6 +45,7 @@ export const reducer = (
 			};
 		case "ADD_MEMBER":
 			return { ...state, members: [...state.members, action.payload] };
+
 		case "REMOVE_MEMBER":
 			return {
 				...state,

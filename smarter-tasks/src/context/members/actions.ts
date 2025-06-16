@@ -36,11 +36,16 @@ export const addMember = async (
 			},
 			body: JSON.stringify(memberData),
 		});
+
 		const data = await response.json();
+
 		if (!response.ok) {
 			return { ok: false, error: data.message || "Failed to add member" };
 		}
-		dispatch({ type: "ADD_MEMBER", payload: data });
+
+		// ✅ Make sure we dispatch only the actual member object:
+		dispatch({ type: "ADD_MEMBER", payload: data.user || data });
+
 		return { ok: true };
 	} catch (error) {
 		return { ok: false, error: "Network error" };

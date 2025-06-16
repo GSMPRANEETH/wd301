@@ -8,8 +8,19 @@ const MembersDispatchContext = createContext<
 	React.Dispatch<MembersAction> | undefined
 >(undefined);
 
-export const useMembersState = () => useContext(MembersStateContext);
-export const useMembersDispatch = () => useContext(MembersDispatchContext);
+export const useMembersState = () => {
+	const context = useContext(MembersStateContext);
+	if (!context)
+		throw new Error("useMembersState must be used within MembersProvider");
+	return context;
+};
+
+export const useMembersDispatch = () => {
+	const context = useContext(MembersDispatchContext);
+	if (!context)
+		throw new Error("useMembersDispatch must be used within MembersProvider");
+	return context;
+};
 
 export const MembersProvider: React.FC<React.PropsWithChildren> = ({
 	children,
