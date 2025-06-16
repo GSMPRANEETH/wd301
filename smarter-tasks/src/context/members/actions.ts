@@ -1,7 +1,7 @@
 // src/context/members/actions.ts
 
 import { API_ENDPOINT } from "../../config/constants";
-import { MembersAction, Member } from "./reducer";
+import { MembersAction } from "./reducer";
 
 export const fetchMembers = async (dispatch: React.Dispatch<MembersAction>) => {
 	dispatch({ type: "FETCH_START" });

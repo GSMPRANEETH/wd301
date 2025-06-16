@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useMembersDispatch } from "../../context/members/context";
 import { fetchMembers } from "../../context/members/actions";
 import NewMember from "./NewMember";
