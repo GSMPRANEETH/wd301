@@ -8,7 +8,9 @@ interface TaskFormState {
 	description: string;
 	dueDate: string;
 }
+
 interface TaskItem {
+	id: string; // Required — don't allow undefined anymore
 	title: string;
 	description: string;
 	dueDate: string;
@@ -39,12 +41,20 @@ const TaskForm = (props: TaskFormProps) => {
 	const addTask: React.FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
 		console.log(`Submitted the form with`);
+
 		if (formState.title.length === 0 || formState.dueDate.length === 0) {
 			return;
 		}
-		props.addTask(formState);
-		setFormState({ title: "", description: "", dueDate: "" });
+
+		const newTask: TaskItem = {
+			...formState,
+			id: crypto.randomUUID(), // ← generate unique id at submit time
+		};
+
+		props.addTask(newTask);
+		setFormState({ id: "", title: "", description: "", dueDate: "" });
 	};
+
 	return (
 		<form onSubmit={addTask}>
 			<div className="grid md:grid-cols-4 md:gap-3">
