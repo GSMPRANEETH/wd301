@@ -52,7 +52,7 @@ const TaskForm = (props: TaskFormProps) => {
 		};
 
 		props.addTask(newTask);
-		setFormState({ id: "", title: "", description: "", dueDate: "" });
+		setFormState({ title: "", description: "", dueDate: "" });
 	};
 
 	return (
