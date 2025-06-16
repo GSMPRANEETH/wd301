@@ -1,13 +1,13 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import AccountLayout from "../layouts/account";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoutes";
 import Signin from "../pages/signin";
 import Signup from "../pages/signup";
 import Projects from "../pages/projects";
 import MembersPage from "../pages/members";
 import Logout from "../pages/logout";
-import NotFound from "../pages/notfound"; // make sure this component exists
+import NotFound from "../pages/Notfound"; // make sure this component exists
 import { MembersProvider } from "../context/members/context";
 const router = createBrowserRouter([
 	{ path: "/", element: <Navigate to="/account/projects" replace /> },

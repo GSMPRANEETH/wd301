@@ -6,7 +6,7 @@ import { useProjectsDispatch } from "../../context/projects/context";
 
 // I'll import the ProjectListItems component from the same folder.
 // This I'll define next.
-import ProjectListItems from "./ProjectListItems";
+import ProjectListItems from "../../pages/projects/ProjectListItems";
 const ProjectList: React.FC = () => {
 	// I'll define a new constant called dispatchProjects,
 	// to call the useProjectsDispatch() hook.
