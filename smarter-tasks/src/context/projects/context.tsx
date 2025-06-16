@@ -12,17 +12,24 @@ const ProjectsStateContext = createContext<ProjectsState | undefined>(
 	undefined
 );
 
-type ProjectsDispatch = React.Dispatch<ProjectsActions>;
 export const useProjectsState = () => useContext(ProjectsStateContext);
 // Using createContext function, we will create a context
 // called `ProjectsDispatchContext`. Let's say the shape of this new
 // context object is ProjectsDispatch (which I'll define now, wait for it).
 // I've set the default value to undefined.
-export const useProjectsDispatch = () => useContext(ProjectsDispatchContext);
+// Replace or add these lines
+const ProjectsDispatchContext = createContext<
+	React.Dispatch<ProjectsActions> | undefined
+>(undefined); // ✅ this was missing
 
-const ProjectsDispatchContext = createContext<ProjectsDispatch | undefined>(
-	undefined
-);
+// Replace the hook with:
+export const useProjectsDispatch = () => {
+	const context = useContext(ProjectsDispatchContext);
+	if (!context)
+		throw new Error("useProjectsDispatch must be used within ProjectsProvider");
+	return context;
+};
+
 export const ProjectsProvider: React.FC<React.PropsWithChildren> = ({
 	children,
 }) => {

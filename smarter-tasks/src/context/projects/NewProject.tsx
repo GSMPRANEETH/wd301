@@ -15,7 +15,7 @@ const NewProject = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	// Next, I'll add a new state to handle errors.
-	const [error, setError] = useState(null);
+	const [error, setError] = useState<string | null>(null);
 
 	// Then I'll call the useProjectsDispatch function to get the dispatch function
 	// for projects
@@ -23,8 +23,10 @@ const NewProject = () => {
 	const {
 		register,
 		handleSubmit,
+		reset, // ← Add this
 		formState: { errors },
 	} = useForm<Inputs>();
+
 	const closeModal = () => {
 		setIsOpen(false);
 	};

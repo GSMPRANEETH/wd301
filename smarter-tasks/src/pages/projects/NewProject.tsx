@@ -4,7 +4,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { API_ENDPOINT } from "../../config/constants";
 import { useProjectsDispatch } from "../../context/projects/context";
 import { addProject } from "../../context/projects/actions";
 
@@ -14,31 +13,35 @@ type Inputs = {
 
 const NewProject = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [error, setError] = useState<string | null>(null); // ✅ error state as string | null
 
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm<Inputs>();
 
+	const dispatch = useProjectsDispatch();
+
 	const openModal = () => {
 		setIsOpen(true);
+		setError(null); // reset any previous error
 	};
 
 	const closeModal = () => {
 		setIsOpen(false);
 	};
 
-	const dispatch = useProjectsDispatch();
-
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		const result = await addProject(dispatch, data);
 
 		if (result.ok) {
-			closeModal(); // ✅ close modal
 			reset(); // ✅ clear form
+			closeModal(); // ✅ close modal
+			setError(null);
 		} else {
-			console.error("Failed to create project:", result.error);
+			setError(result.error ?? "Something went wrong"); // ✅ show error message
 		}
 	};
 
