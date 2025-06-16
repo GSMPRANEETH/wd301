@@ -28,7 +28,7 @@ const SignupForm: React.FC = () => {
 				throw new Error("Sign-up failed");
 			}
 			console.log("Sign-up successful");
-			navigate("/dashboard", { replace: true });
+			navigate("/signin", { replace: true });
 		} catch (error) {
 			console.error("Sign-up failed:", error);
 		}
