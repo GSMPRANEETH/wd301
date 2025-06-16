@@ -22,11 +22,11 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<a
+					href="/logout"
 					id="logout-link"
 					onClick={() => {
 						localStorage.removeItem("authToken");
 						localStorage.removeItem("userData");
-						window.location.href = "/signin";
 					}}
 					className="inline-block bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
 				>
