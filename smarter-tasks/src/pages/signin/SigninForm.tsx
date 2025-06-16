@@ -34,7 +34,7 @@ const SigninForm: React.FC = () => {
 			// Navigate to dashboard after successful sign-in
 			navigate("/dashboard", { replace: true });
 		} catch (error) {
-			console.error("Sign-up failed:", error);
+			console.error("Sign-in failed:", error);
 		}
 	};
 	// Then we will use the handleSubmit function with our form
