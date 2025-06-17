@@ -26,10 +26,11 @@ export const fetchComments = async (
 		const data: Comment[] = await response.json();
 		console.log("[fetchComments] response data:", data);
 
-		const normalized = data.map((c) => ({
+		const normalized = data.map((c: any) => ({
 			id: c.id,
 			text: c.description ?? "",
-			timestamp: c.updatedAt ?? new Date().toISOString(),
+			timestamp: c.updatedAt ?? c.timestamp ?? new Date().toISOString(),
+			updatedAt: c.updatedAt ?? new Date().toISOString(),
 		}));
 
 		dispatch({ type: "FETCH_COMMENTS_SUCCESS", payload: normalized });
