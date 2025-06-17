@@ -242,7 +242,7 @@ export default function TaskDetails() {
 									</button>
 								</div>
 
-								<div className="space-y-2 max-h-48 overflow-auto">
+								<div className="comment space-y-2 max-h-48 overflow-auto">
 									{commentState.allIds
 										.map((id) => commentState.byId[id])
 										.sort(
@@ -255,11 +255,13 @@ export default function TaskDetails() {
 												key={comment.id}
 												className="comment p-2 border rounded"
 											>
-												<div className="comment text-sm">
+												<div className="comment text-sm ">
 													{comment.text?.trim() ? (
 														comment.text
 													) : (
-														<i className="text-gray-400">(no content)</i>
+														<i className=" comment text-gray-400">
+															(no content)
+														</i>
 													)}
 												</div>
 											</div>
