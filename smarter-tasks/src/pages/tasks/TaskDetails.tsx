@@ -221,22 +221,22 @@ export default function TaskDetails() {
 									</div>
 								</form>
 
-								<hr className="my-4" />
-								<h4 className="font-semibold mb-2">Comments</h4>
+								<hr className="comment my-4" />
+								<h4 className="comment font-semibold mb-2">Comments</h4>
 
-								<div className="flex space-x-2 mb-4">
+								<div className="comment flex space-x-2 mb-4">
 									<input
 										id="commentBox"
 										type="text"
 										placeholder="Add a comment…"
 										value={newComment}
 										onChange={(e) => setNewComment(e.target.value)}
-										className="flex-1 border rounded px-3 py-2"
+										className="comment flex-1 border rounded px-3 py-2"
 									/>
 									<button
 										id="addCommentBtn"
 										onClick={handleAddComment}
-										className="px-4 py-2 bg-blue-600 text-white rounded"
+										className="comment px-4 py-2 bg-blue-600 text-white rounded"
 									>
 										Add
 									</button>
