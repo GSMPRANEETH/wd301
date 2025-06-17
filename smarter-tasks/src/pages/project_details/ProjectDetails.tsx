@@ -1,19 +1,28 @@
 import { Link, useParams } from "react-router-dom";
 
+import { useTasksState } from "../../context/task/context";
+import DragDropList from "./DragDropList";
 import { useProjectsState } from "../../context/projects/context";
 
 const ProjectDetails = () => {
+	// Extract task and project from context
+	const tasksState = useTasksState();
 	const projectState = useProjectsState();
-	let { projectID } = useParams();
+	const { projectID } = useParams();
 
+	// Get the selected project based on `projectID`
 	const selectedProject = projectState?.projects.filter(
 		(project) => `${project.id}` === projectID
 	)?.[0];
 
+	// Display error if there is no project with given id.
 	if (!selectedProject) {
 		return <>No such Project!</>;
 	}
 
+	if (tasksState.isLoading) {
+		return <>Loading...</>;
+	}
 	return (
 		<>
 			<div className="flex justify-between">
@@ -28,6 +37,9 @@ const ProjectDetails = () => {
 						New Task
 					</button>
 				</Link>
+			</div>
+			<div className="grid grid-cols-1 gap-2">
+				<DragDropList data={tasksState.projectData} />
 			</div>
 		</>
 	);
