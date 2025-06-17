@@ -255,7 +255,7 @@ export default function TaskDetails() {
 												key={comment.id}
 												className="comment p-2 border rounded"
 											>
-												<div className="text-sm">
+												<div className="comment text-sm">
 													{comment.text?.trim() ? (
 														comment.text
 													) : (
