@@ -1,18 +1,38 @@
-import React from "react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useProjectsState } from "../../context/projects/context";
 import { useTasksState } from "../../context/task/context";
+
+// pull in your new comment hooks & action
+import { useCommentDispatch } from "../../context/comment/context";
+import { fetchComments } from "../../context/comment/actions";
+
 import TaskDetails from "./TaskDetails";
-import { useParams } from "react-router-dom";
 
 const TaskDetailsContainer = () => {
-	let { taskID } = useParams();
+	let { projectID, taskID } = useParams<{
+		projectID: string;
+		taskID: string;
+	}>();
+
 	const projectState = useProjectsState();
 	const taskListState = useTasksState();
 	const isFetchingTasks = taskListState.isLoading;
 	const selectedTask = taskListState.projectData.tasks?.[taskID || ""];
-	// We will render a loader based on the status,
-	// We make sure, the tasks have been fetched, project is a valid one.
-	if (isFetchingTasks || !projectState || projectState?.isLoading) {
+
+	// set up comment dispatcher
+	const commentDispatch = useCommentDispatch();
+
+	// fetch comments using the new signature
+	useEffect(() => {
+		if (projectID && taskID) {
+			// CLEAR_COMMENTS is optional if you want to reset between tasks
+			commentDispatch({ type: "CLEAR_COMMENTS" });
+			fetchComments(commentDispatch, projectID, taskID);
+		}
+	}, [projectID, taskID, commentDispatch]);
+
+	if (isFetchingTasks || projectState.isLoading) {
 		return <>Loading...</>;
 	}
 	if (!selectedTask) {

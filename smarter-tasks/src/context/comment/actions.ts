@@ -1,0 +1,89 @@
+// src/context/comment/actions.ts
+import { API_ENDPOINT } from "../../config/constants";
+import type { Comment } from "./types";
+
+export const fetchComments = async (
+	dispatch: React.Dispatch<any>,
+	projectId: string,
+	taskId: string
+): Promise<void> => {
+	const token = localStorage.getItem("authToken") ?? "";
+
+	dispatch({ type: "FETCH_COMMENTS_REQUEST" });
+
+	try {
+		const response = await fetch(
+			`${API_ENDPOINT}/projects/${projectId}/tasks/${taskId}/comments`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		const data = await response.json();
+
+		const normalized = data.map((c: any) => ({
+			id: c.id,
+			text: c.description ?? "", // 👈 Fix: map description → text
+			timestamp: c.updatedAt ?? c.timestamp ?? new Date().toISOString(),
+		}));
+
+		dispatch({ type: "FETCH_COMMENTS_SUCCESS", payload: normalized });
+	} catch (error: any) {
+		dispatch({
+			type: "FETCH_COMMENTS_FAILURE",
+			payload: error.message || "Unable to load comments",
+		});
+	}
+};
+
+export const addComment = async (
+	dispatch: React.Dispatch<any>,
+	projectId: string,
+	taskId: string,
+	text: string
+): Promise<{ ok: boolean; error?: string }> => {
+	const token = localStorage.getItem("authToken") ?? "";
+
+	dispatch({ type: "ADD_COMMENT_REQUEST" });
+
+	try {
+		const response = await fetch(
+			`${API_ENDPOINT}/projects/${projectId}/tasks/${taskId}/comments`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({ description: text }), // 👈 Fix: send correct field
+			}
+		);
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			const message = data.errors?.[0]?.message || "Failed to post comment";
+			dispatch({ type: "ADD_COMMENT_FAILURE", payload: message });
+			return { ok: false, error: message };
+		}
+
+		const comment: Comment = {
+			id: data.id,
+			text: data.description ?? "",
+			timestamp: data.updatedAt ?? new Date().toISOString(),
+		};
+
+		dispatch({ type: "ADD_COMMENT_SUCCESS", payload: comment });
+		return { ok: true };
+	} catch (error: any) {
+		dispatch({
+			type: "ADD_COMMENT_FAILURE",
+			payload: error.message || "Unexpected error",
+		});
+		return { ok: false, error: error.message || "Unexpected error" };
+	}
+};

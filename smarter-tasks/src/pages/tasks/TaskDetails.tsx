@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -9,41 +9,47 @@ import { useProjectsState } from "../../context/projects/context";
 import { TaskDetailsPayload } from "../../context/task/types";
 import { useMembersState } from "../../context/members/context";
 
-type TaskFormUpdatePayload = TaskDetailsPayload & {
-	selectedPerson: string;
-};
+import {
+	useCommentState,
+	useCommentDispatch,
+} from "../../context/comment/context";
+import { fetchComments, addComment } from "../../context/comment/actions"; // <— use addComment here
 
-// Helper function to format ISO date to YYYY-MM-DD
+type TaskFormUpdatePayload = TaskDetailsPayload & { selectedPerson: string };
+
 const formatDateForPicker = (isoDate: string) => {
-	const dateObj = new Date(isoDate);
-	const year = dateObj.getFullYear();
-	const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-	const day = String(dateObj.getDate()).padStart(2, "0");
-	return `${year}-${month}-${day}`;
+	const d = new Date(isoDate);
+	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+		2,
+		"0"
+	)}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
 export default function TaskDetails() {
 	const [isOpen, setIsOpen] = useState(true);
-	const { projectID, taskID } = useParams();
+	const { projectID, taskID } = useParams<{
+		projectID: string;
+		taskID: string;
+	}>();
 	const navigate = useNavigate();
 
 	const projectState = useProjectsState();
-	const taskListState = useTasksState();
+	const taskState = useTasksState();
 	const taskDispatch = useTasksDispatch();
 	const memberState = useMembersState();
 
-	const selectedProject = projectState.projects.find(
-		(proj) => String(proj.id) === projectID
-	);
+	const commentState = useCommentState();
+	const commentDispatch = useCommentDispatch();
+	const [newComment, setNewComment] = useState("");
 
-	if (!selectedProject) {
-		return <div>No such Project!</div>;
-	}
+	// Validate project & task
+	const project = projectState.projects.find((p) => String(p.id) === projectID);
+	if (!project) return <div>No such project!</div>;
+	const task = taskState.projectData.tasks[taskID!];
+	if (!task) return <div>No such task!</div>;
 
-	const selectedTask = taskListState.projectData.tasks[taskID!];
-
-	// Initialize selected person
-	const initialPerson = selectedTask.assignedUserName || "";
+	// Form setup
+	const initialPerson = task.assignedUserName || "";
 	const [selectedPerson, setSelectedPerson] = useState(initialPerson);
 
 	const {
@@ -52,12 +58,20 @@ export default function TaskDetails() {
 		formState: { errors },
 	} = useForm<TaskFormUpdatePayload>({
 		defaultValues: {
-			title: selectedTask.title,
-			description: selectedTask.description,
-			dueDate: formatDateForPicker(selectedTask.dueDate),
+			title: task.title,
+			description: task.description,
+			dueDate: formatDateForPicker(task.dueDate),
 			selectedPerson: initialPerson,
 		},
 	});
+
+	// Fetch existing comments once via the action that dispatches for us
+	useEffect(() => {
+		if (projectID && taskID) {
+			commentDispatch({ type: "CLEAR_COMMENTS" }); // optional: clear old
+			fetchComments(commentDispatch, projectID, taskID);
+		}
+	}, [projectID, taskID, commentDispatch]);
 
 	const closeModal = () => {
 		setIsOpen(false);
@@ -66,21 +80,35 @@ export default function TaskDetails() {
 
 	const onSubmit: SubmitHandler<TaskFormUpdatePayload> = (data) => {
 		const assignee = memberState.members.find((m) => m.name === selectedPerson);
-
-		updateTask(taskDispatch, projectID || "", {
-			...selectedTask,
+		updateTask(taskDispatch, projectID!, {
+			...task,
 			title: data.title,
 			description: data.description,
 			dueDate: data.dueDate,
 			assignee: assignee?.id,
 		});
-
 		closeModal();
+	};
+
+	const handleAddComment = async () => {
+		if (!newComment.trim()) return;
+		const result = await addComment(
+			commentDispatch,
+			projectID!,
+			taskID!,
+			newComment
+		);
+		if (result.ok) {
+			setNewComment("");
+		} else {
+			alert(`Failed to add comment: ${result.error}`);
+		}
 	};
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog as="div" className="relative z-10" onClose={closeModal}>
+				{/* Backdrop */}
 				<Transition.Child
 					as={Fragment}
 					enter="ease-out duration-300"
@@ -93,6 +121,7 @@ export default function TaskDetails() {
 					<div className="fixed inset-0 bg-black bg-opacity-25" />
 				</Transition.Child>
 
+				{/* Panel */}
 				<div className="fixed inset-0 overflow-y-auto">
 					<div className="flex min-h-full items-center justify-center p-4 text-center">
 						<Transition.Child
@@ -104,28 +133,33 @@ export default function TaskDetails() {
 							leaveFrom="opacity-100 scale-100"
 							leaveTo="opacity-0 scale-95"
 						>
-							<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+							<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl transition-all">
 								<Dialog.Title
 									as="h3"
-									className="text-lg font-medium leading-6 text-gray-900"
+									className="text-lg font-medium text-gray-900"
 								>
 									Task Details
 								</Dialog.Title>
-								<form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+
+								{/* Update Form */}
+								<form
+									onSubmit={handleSubmit(onSubmit)}
+									className="mt-4 space-y-4"
+								>
 									<input
 										type="text"
-										placeholder="Enter title"
+										placeholder="Title"
 										{...register("title", { required: true })}
-										className="w-full border rounded-md py-2 px-3 mb-4"
+										className="w-full border rounded px-3 py-2"
 									/>
 									{errors.title && (
 										<p className="text-red-500">Title is required.</p>
 									)}
 
 									<textarea
-										placeholder="Enter description"
+										placeholder="Description"
 										{...register("description", { required: true })}
-										className="w-full border rounded-md py-2 px-3 mb-4"
+										className="w-full border rounded px-3 py-2"
 									/>
 									{errors.description && (
 										<p className="text-red-500">Description is required.</p>
@@ -134,49 +168,35 @@ export default function TaskDetails() {
 									<input
 										type="date"
 										{...register("dueDate", { required: true })}
-										className="w-full border rounded-md py-2 px-3 mb-4"
+										className="w-full border rounded px-3 py-2"
 									/>
 									{errors.dueDate && (
 										<p className="text-red-500">Due date is required.</p>
 									)}
 
-									<div className="mb-4">
-										<label className="block font-semibold mb-1">Assignee</label>
+									<div>
+										<label className="block mb-1 font-semibold">Assignee</label>
 										<Listbox
 											value={selectedPerson}
 											onChange={setSelectedPerson}
 										>
-											<Listbox.Button className="w-full border rounded-md py-2 px-3 text-left">
-												{selectedPerson || "Select a member"}
+											<Listbox.Button className="w-full border rounded px-3 py-2 text-left">
+												{selectedPerson || "Select member"}
 											</Listbox.Button>
-											<Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-												{memberState.members.map((person) => (
-													<Listbox.Option
-														key={person.id}
-														value={person.name}
-														className={({ active }) =>
-															`cursor-default select-none py-2 pl-10 pr-4 ${
-																active
-																	? "bg-blue-100 text-blue-900"
-																	: "text-gray-900"
-															}`
-														}
-													>
-														{({ selected }) => (
-															<>
-																<span
-																	className={`block truncate ${
-																		selected ? "font-medium" : "font-normal"
-																	}`}
-																>
-																	{person.name}
-																</span>
+											<Listbox.Options className="absolute mt-1 w-full bg-white shadow rounded max-h-40 overflow-auto">
+												{memberState.members.map((m) => (
+													<Listbox.Option key={m.id} value={m.name}>
+														{({ active, selected }) => (
+															<div
+																className={`px-3 py-2 flex items-center ${
+																	active ? "bg-blue-100" : ""
+																}`}
+															>
 																{selected && (
-																	<span className="absolute inset-y-0 left-0 flex items-center pl-3">
-																		<CheckIcon className="h-5 w-5 text-blue-600" />
-																	</span>
+																	<CheckIcon className="w-4 h-4 mr-2" />
 																)}
-															</>
+																<span>{m.name}</span>
+															</div>
 														)}
 													</Listbox.Option>
 												))}
@@ -184,22 +204,72 @@ export default function TaskDetails() {
 										</Listbox>
 									</div>
 
-									<div className="flex justify-end">
+									<div className="flex justify-end space-x-2">
 										<button
 											type="button"
 											onClick={closeModal}
-											className="mr-2 rounded-md bg-gray-200 px-4 py-2"
+											className="px-4 py-2 bg-gray-200 rounded"
 										>
 											Cancel
 										</button>
 										<button
 											type="submit"
-											className="rounded-md bg-blue-600 px-4 py-2 text-white"
+											className="px-4 py-2 bg-blue-600 text-white rounded"
 										>
 											Update
 										</button>
 									</div>
 								</form>
+
+								{/* Comments Section */}
+								{/* ─── Comments Section ───────────────────────────────────━ */}
+								{/* ─── Comments Section ───────────────────────────────────━ */}
+								<hr className="my-4" />
+								<h4 className="font-semibold mb-2">Comments</h4>
+
+								{/* Input stays at top */}
+								<div className="flex space-x-2 mb-4">
+									<input
+										id="commentBox"
+										type="text"
+										placeholder="Add a comment…"
+										value={newComment}
+										onChange={(e) => setNewComment(e.target.value)}
+										className="flex-1 border rounded px-3 py-2"
+									/>
+									<button
+										id="addCommentBtn"
+										onClick={handleAddComment}
+										className="px-4 py-2 bg-blue-600 text-white rounded"
+									>
+										Add
+									</button>
+								</div>
+
+								{/* Comments list: newest first */}
+								<div className="space-y-2 max-h-48 overflow-auto">
+									{commentState.allIds
+										.map((id) => commentState.byId[id])
+										.sort(
+											(a, b) =>
+												new Date(b.timestamp).getTime() -
+												new Date(a.timestamp).getTime()
+										)
+										.map((comment) => (
+											<div
+												key={comment.id}
+												className="comment p-2 border rounded"
+											>
+												<div className="text-sm">
+													{comment.text?.trim() ? (
+														comment.text
+													) : (
+														<i className="text-gray-400">(no content)</i>
+													)}
+												</div>
+											</div>
+										))}
+								</div>
 							</Dialog.Panel>
 						</Transition.Child>
 					</div>
