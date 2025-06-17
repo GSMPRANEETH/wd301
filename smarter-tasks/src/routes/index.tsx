@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import TaskDetailsContainer from "../pages/tasks/TaskDetailsContainer";
 
 import AccountLayout from "../layouts/account";
 import ProtectedRoute from "./ProtectedRoutes";
@@ -44,13 +45,12 @@ const router = createBrowserRouter([
 									{ index: true, element: <Navigate to="../" /> },
 									{
 										path: "new",
-										// Render `NewTask` component
 										element: <NewTask />,
 									},
 									{
 										path: ":taskID",
 										children: [
-											{ index: true, element: <>Show Task Details</> },
+											{ index: true, element: <TaskDetailsContainer /> },
 										],
 									},
 								],

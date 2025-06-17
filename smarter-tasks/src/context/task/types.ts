@@ -19,10 +19,14 @@ export enum TaskListAvailableAction {
 	CREATE_TASK_SUCCESS = "CREATE_TASK_SUCCESS",
 	CREATE_TASK_FAILURE = "CREATE_TASK_FAILURE",
 
+	// Add action types
+	UPDATE_TASK_REQUEST = "UPDATE_TASK_REQUEST",
+	UPDATE_TASK_SUCCESS = "UPDATE_TASK_SUCCESS",
+	UPDATE_TASK_FAILURE = "UPDATE_TASK_FAILURE",
+
 	REORDER_TASKS = "REORDER_TASKS",
 }
 
-// Define the action types and payload
 export type TaskActions =
 	| { type: TaskListAvailableAction.REORDER_TASKS; payload: ProjectData }
 	| { type: TaskListAvailableAction.FETCH_TASKS_REQUEST }
@@ -33,7 +37,10 @@ export type TaskActions =
 	| { type: TaskListAvailableAction.DELETE_TASKS_FAILURE; payload: string }
 	| { type: TaskListAvailableAction.CREATE_TASK_REQUEST }
 	| { type: TaskListAvailableAction.CREATE_TASK_SUCCESS }
-	| { type: TaskListAvailableAction.CREATE_TASK_FAILURE; payload: string };
+	| { type: TaskListAvailableAction.CREATE_TASK_FAILURE; payload: string }
+	| { type: TaskListAvailableAction.UPDATE_TASK_REQUEST }
+	| { type: TaskListAvailableAction.UPDATE_TASK_SUCCESS }
+	| { type: TaskListAvailableAction.UPDATE_TASK_FAILURE; payload: string };
 export type TasksDispatch = React.Dispatch<TaskActions>;
 export type TaskDetailsPayload = Omit<TaskDetails, "id" | "assignee" | "state">;
 
