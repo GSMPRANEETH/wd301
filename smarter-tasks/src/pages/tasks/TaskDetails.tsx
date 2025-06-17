@@ -243,7 +243,7 @@ export default function TaskDetails() {
 								</div>
 
 								<div className="space-y-2 max-h-48 overflow-auto">
-									{commentState.allIds.map((id) => {
+									{[...commentState.allIds].map((id) => {
 										const comment = commentState.byId[id];
 										return (
 											<div
