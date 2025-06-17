@@ -51,12 +51,24 @@ export const reducer = (
 			};
 		}
 
-		case "ADD_COMMENT_SUCCESS":
+		case "ADD_COMMENT_SUCCESS": {
+			const updatedById = {
+				...state.byId,
+				[action.payload.id]: action.payload,
+			};
+
+			const updatedAllIds = [...state.allIds, action.payload.id];
+
 			return {
 				...state,
-				byId: { ...state.byId, [action.payload.id]: action.payload },
-				allIds: [action.payload.id, ...state.allIds],
+				byId: updatedById,
+				allIds: updatedAllIds.sort(
+					(a, b) =>
+						new Date(updatedById[b].timestamp).getTime() -
+						new Date(updatedById[a].timestamp).getTime()
+				),
 			};
+		}
 
 		case "FETCH_COMMENTS_FAILURE":
 		case "ADD_COMMENT_FAILURE":
