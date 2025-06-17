@@ -242,14 +242,11 @@ export default function TaskDetails() {
 									</button>
 								</div>
 
-								<div className="space-y-2 max-h-48 overflow-auto">
-									{[...commentState.allIds].reverse().map((id) => {
+								<div className="comment space-y-2 max-h-48 overflow-auto">
+									{[...commentState.allIds].map((id) => {
 										const comment = commentState.byId[id];
 										return (
-											<div
-												key={comment.id}
-												className="comment p-2 border rounded"
-											>
+											<div key={comment.id} className=" p-2 border rounded">
 												<div className="text-sm">
 													{comment.text?.trim() ? (
 														comment.text
