@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
-import React from "react";
 import { useProjectsState } from "../../context/projects/context";
 import { Link } from "react-router-dom";
 

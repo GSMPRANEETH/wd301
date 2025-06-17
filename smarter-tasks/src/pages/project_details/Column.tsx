@@ -36,7 +36,7 @@ const Column: React.FC<Props> = ({ column, tasks }) => (
 			isCombineEnabled={false}
 			ignoreContainerClipping={false}
 		>
-			{(provided, snapshot) => (
+			{(provided) => (
 				<TaskList ref={provided.innerRef} {...provided.droppableProps}>
 					{tasks.map((task, idx) => (
 						<Task key={task.id} task={task} index={idx} />

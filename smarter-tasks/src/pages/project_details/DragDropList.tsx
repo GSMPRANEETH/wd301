@@ -56,7 +56,6 @@ const DragDropList = (props: { data: ProjectData }) => {
 
 		// Moving to a different column
 		const startTaskIDs = Array.from(start.taskIDs);
-		const removed = startTaskIDs.splice(source.index, 1); // returns [taskID]
 
 		const newStart = {
 			...start,

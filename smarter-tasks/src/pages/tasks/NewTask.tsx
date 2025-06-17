@@ -14,11 +14,7 @@ const NewTask = () => {
 	let navigate = useNavigate();
 
 	// Use react-hook-form to create form submission handler and state.
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<TaskDetailsPayload>();
+	const { register, handleSubmit } = useForm<TaskDetailsPayload>();
 	const projectState = useProjectsState();
 	const taskDispatch = useTasksDispatch();
 

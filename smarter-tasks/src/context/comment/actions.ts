@@ -1,7 +1,7 @@
-// src/context/comment/actions.ts
 import { API_ENDPOINT } from "../../config/constants";
 import type { Comment } from "./types";
 
+// FETCH COMMENTS
 export const fetchComments = async (
 	dispatch: React.Dispatch<any>,
 	projectId: string,
@@ -23,12 +23,13 @@ export const fetchComments = async (
 			}
 		);
 
-		const data = await response.json();
+		const data: Comment[] = await response.json();
+		console.log("[fetchComments] response data:", data);
 
-		const normalized = data.map((c: any) => ({
+		const normalized = data.map((c) => ({
 			id: c.id,
-			text: c.description ?? "", // 👈 Fix: map description → text
-			timestamp: c.updatedAt ?? c.timestamp ?? new Date().toISOString(),
+			text: c.description ?? "",
+			timestamp: c.updatedAt ?? new Date().toISOString(),
 		}));
 
 		dispatch({ type: "FETCH_COMMENTS_SUCCESS", payload: normalized });
@@ -40,6 +41,7 @@ export const fetchComments = async (
 	}
 };
 
+// POST COMMENT
 export const addComment = async (
 	dispatch: React.Dispatch<any>,
 	projectId: string,
@@ -59,11 +61,12 @@ export const addComment = async (
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ description: text }), // 👈 Fix: send correct field
+				body: JSON.stringify({ description: text }),
 			}
 		);
 
 		const data = await response.json();
+		console.log("[addComment] raw response:", data);
 
 		if (!response.ok) {
 			const message = data.errors?.[0]?.message || "Failed to post comment";
@@ -75,6 +78,8 @@ export const addComment = async (
 			id: data.id,
 			text: data.description ?? "",
 			timestamp: data.updatedAt ?? new Date().toISOString(),
+			updatedAt: data.updatedAt ?? new Date().toISOString(), // ✅ Required field
+			authorName: "", // You can enhance this later
 		};
 
 		dispatch({ type: "ADD_COMMENT_SUCCESS", payload: comment });

@@ -1,15 +1,14 @@
-// src/context/comment/context.tsx
 import React, { createContext, useReducer, useContext } from "react";
-import { initialState, reducer } from "./reducer"; // ✅ fixed
-import type { CommentState, CommentAction } from "./types";
+import { reducer as commentReducer, initialState } from "./reducer";
+import type { CommentState, CommentActions } from "./reducer"; // <- not ./types
 
 const StateContext = createContext<CommentState>(initialState);
-const DispatchContext = createContext<React.Dispatch<CommentAction>>(() => {});
+const DispatchContext = createContext<React.Dispatch<CommentActions>>(() => {});
 
 export const CommentProvider: React.FC<React.PropsWithChildren> = ({
 	children,
 }) => {
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(commentReducer, initialState);
 	return (
 		<StateContext.Provider value={state}>
 			<DispatchContext.Provider value={dispatch}>

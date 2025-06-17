@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -13,7 +13,7 @@ import {
 	useCommentState,
 	useCommentDispatch,
 } from "../../context/comment/context";
-import { fetchComments, addComment } from "../../context/comment/actions"; // <— use addComment here
+import { fetchComments, addComment } from "../../context/comment/actions";
 
 type TaskFormUpdatePayload = TaskDetailsPayload & { selectedPerson: string };
 
@@ -37,20 +37,24 @@ export default function TaskDetails() {
 	const taskState = useTasksState();
 	const taskDispatch = useTasksDispatch();
 	const memberState = useMembersState();
-
 	const commentState = useCommentState();
 	const commentDispatch = useCommentDispatch();
-	const [newComment, setNewComment] = useState("");
 
-	// Validate project & task
+	const [newComment, setNewComment] = useState<string>("");
+
+	// Check if state is ready
+	if (!projectState || projectState.isLoading) return <>Loading...</>;
+	if (!taskState || taskState.isLoading) return <>Loading...</>;
+
+	// Get task and project
 	const project = projectState.projects.find((p) => String(p.id) === projectID);
-	if (!project) return <div>No such project!</div>;
 	const task = taskState.projectData.tasks[taskID!];
+	if (!project) return <div>No such project!</div>;
 	if (!task) return <div>No such task!</div>;
 
 	// Form setup
 	const initialPerson = task.assignedUserName || "";
-	const [selectedPerson, setSelectedPerson] = useState(initialPerson);
+	const [selectedPerson, setSelectedPerson] = useState<string>(initialPerson);
 
 	const {
 		register,
@@ -65,10 +69,9 @@ export default function TaskDetails() {
 		},
 	});
 
-	// Fetch existing comments once via the action that dispatches for us
 	useEffect(() => {
 		if (projectID && taskID) {
-			commentDispatch({ type: "CLEAR_COMMENTS" }); // optional: clear old
+			commentDispatch({ type: "CLEAR_COMMENTS" });
 			fetchComments(commentDispatch, projectID, taskID);
 		}
 	}, [projectID, taskID, commentDispatch]);
@@ -108,7 +111,6 @@ export default function TaskDetails() {
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog as="div" className="relative z-10" onClose={closeModal}>
-				{/* Backdrop */}
 				<Transition.Child
 					as={Fragment}
 					enter="ease-out duration-300"
@@ -121,7 +123,6 @@ export default function TaskDetails() {
 					<div className="fixed inset-0 bg-black bg-opacity-25" />
 				</Transition.Child>
 
-				{/* Panel */}
 				<div className="fixed inset-0 overflow-y-auto">
 					<div className="flex min-h-full items-center justify-center p-4 text-center">
 						<Transition.Child
@@ -141,7 +142,6 @@ export default function TaskDetails() {
 									Task Details
 								</Dialog.Title>
 
-								{/* Update Form */}
 								<form
 									onSubmit={handleSubmit(onSubmit)}
 									className="mt-4 space-y-4"
@@ -221,13 +221,9 @@ export default function TaskDetails() {
 									</div>
 								</form>
 
-								{/* Comments Section */}
-								{/* ─── Comments Section ───────────────────────────────────━ */}
-								{/* ─── Comments Section ───────────────────────────────────━ */}
 								<hr className="my-4" />
 								<h4 className="font-semibold mb-2">Comments</h4>
 
-								{/* Input stays at top */}
 								<div className="flex space-x-2 mb-4">
 									<input
 										id="commentBox"
@@ -246,7 +242,6 @@ export default function TaskDetails() {
 									</button>
 								</div>
 
-								{/* Comments list: newest first */}
 								<div className="space-y-2 max-h-48 overflow-auto">
 									{commentState.allIds
 										.map((id) => commentState.byId[id])
