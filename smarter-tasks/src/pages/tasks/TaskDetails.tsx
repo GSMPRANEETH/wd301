@@ -221,51 +221,45 @@ export default function TaskDetails() {
 									</div>
 								</form>
 
-								<hr className="comment my-4" />
-								<h4 className="comment font-semibold mb-2">Comments</h4>
+								<hr className="my-4" />
+								<h4 className="font-semibold mb-2">Comments</h4>
 
-								<div className="comment flex space-x-2 mb-4">
+								<div className="flex space-x-2 mb-4">
 									<input
 										id="commentBox"
 										type="text"
 										placeholder="Add a comment…"
 										value={newComment}
 										onChange={(e) => setNewComment(e.target.value)}
-										className="comment flex-1 border rounded px-3 py-2"
+										className="flex-1 border rounded px-3 py-2"
 									/>
 									<button
 										id="addCommentBtn"
 										onClick={handleAddComment}
-										className="comment px-4 py-2 bg-blue-600 text-white rounded"
+										className="px-4 py-2 bg-blue-600 text-white rounded"
 									>
 										Add
 									</button>
 								</div>
 
-								<div className="comment space-y-2 max-h-48 overflow-auto">
-									{commentState.allIds
-										.map((id) => commentState.byId[id])
-										.sort(
-											(a, b) =>
-												new Date(b.timestamp).getTime() -
-												new Date(a.timestamp).getTime()
-										)
-										.map((comment) => (
+								<div className="space-y-2 max-h-48 overflow-auto">
+									{commentState.allIds.map((id) => {
+										const comment = commentState.byId[id];
+										return (
 											<div
 												key={comment.id}
 												className="comment p-2 border rounded"
 											>
-												<div className="comment text-sm ">
+												<div className="text-sm">
 													{comment.text?.trim() ? (
 														comment.text
 													) : (
-														<i className=" comment text-gray-400">
-															(no content)
-														</i>
+														<i className="text-gray-400">(no content)</i>
 													)}
 												</div>
 											</div>
-										))}
+										);
+									})}
 								</div>
 							</Dialog.Panel>
 						</Transition.Child>
