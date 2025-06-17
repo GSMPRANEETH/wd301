@@ -48,6 +48,9 @@ const Task = forwardRef<
 						<p className="text-sm text-slate-500">
 							Description: {task.description}
 						</p>
+						<p className="text-sm text-slate-500">
+							Assignee: {task.assignedUserName ?? "-"}
+						</p>
 					</div>
 					<button
 						className="deleteTaskButton cursor-pointer h-4 w-4 rounded-full my-5 mr-5"
