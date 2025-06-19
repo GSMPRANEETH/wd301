@@ -246,8 +246,11 @@ export default function TaskDetails() {
 									{[...commentState.allIds].map((id) => {
 										const comment = commentState.byId[id];
 										return (
-											<div key={comment.id} className=" p-2 border rounded">
-												<div className="comment text-sm">{comment.text}</div>
+											<div
+												key={comment.id}
+												className="comment p-2 border rounded"
+											>
+												<p className="text-sm">{comment.text}</p>
 											</div>
 										);
 									})}
