@@ -223,37 +223,35 @@ export default function TaskDetails() {
 
 								<hr className="my-4" />
 								<h4 className="font-semibold mb-2">Comments</h4>
+								<div className="comment">
+									<div className="flex space-x-2 mb-4">
+										<input
+											id="commentBox"
+											type="text"
+											placeholder="Add a comment…"
+											value={newComment}
+											onChange={(e) => setNewComment(e.target.value)}
+											className="flex-1 border rounded px-3 py-2"
+										/>
+										<button
+											id="addCommentBtn"
+											onClick={handleAddComment}
+											className="px-4 py-2 bg-blue-600 text-white rounded"
+										>
+											Add
+										</button>
+									</div>
 
-								<div className="flex space-x-2 mb-4">
-									<input
-										id="commentBox"
-										type="text"
-										placeholder="Add a comment…"
-										value={newComment}
-										onChange={(e) => setNewComment(e.target.value)}
-										className="flex-1 border rounded px-3 py-2"
-									/>
-									<button
-										id="addCommentBtn"
-										onClick={handleAddComment}
-										className="px-4 py-2 bg-blue-600 text-white rounded"
-									>
-										Add
-									</button>
-								</div>
-
-								<div className="space-y-2 max-h-48 overflow-auto">
-									{[...commentState.allIds].map((id) => {
-										const comment = commentState.byId[id];
-										return (
-											<div
-												key={comment.id}
-												className="comment p-2 border rounded"
-											>
-												<p className="text-sm">{comment.text}</p>
-											</div>
-										);
-									})}
+									<div className="space-y-2 max-h-48 overflow-auto">
+										{[...commentState.allIds].map((id) => {
+											const comment = commentState.byId[id];
+											return (
+												<div key={comment.id} className="p-2 border rounded">
+													<p className="text-sm">{comment.text}</p>
+												</div>
+											);
+										})}
+									</div>
 								</div>
 							</Dialog.Panel>
 						</Transition.Child>
