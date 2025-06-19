@@ -8,9 +8,11 @@ const ProjectDetailsIndex: React.FC = () => {
 	return (
 		<TasksProvider>
 			<ErrorBoundary>
-				<Suspense fallback={<div>Loading...</div>}>
-					<ProjectDetails />
-				</Suspense>
+				<div className="suspense-loading">
+					<Suspense fallback={<div>Loading...</div>}>
+						<ProjectDetails />
+					</Suspense>
+				</div>
 			</ErrorBoundary>
 			<Outlet />
 		</TasksProvider>

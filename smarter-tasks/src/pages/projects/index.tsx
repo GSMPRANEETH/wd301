@@ -13,9 +13,13 @@ const Projects = () => {
 				<NewProject />
 			</div>
 			<ErrorBoundary>
-				<Suspense fallback={<div className="suspense-loading">Loading...</div>}>
-					<ProjectList />
-				</Suspense>
+				<div className="suspense-loading">
+					<Suspense
+						fallback={<div className="suspense-loading">Loading...</div>}
+					>
+						<ProjectList />
+					</Suspense>
+				</div>
 			</ErrorBoundary>
 		</>
 	);

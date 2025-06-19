@@ -18,9 +18,13 @@ const MembersPage = () => {
 				<NewMember />
 			</div>
 			<ErrorBoundary>
-				<Suspense fallback={<div className="suspense-loading">Loading...</div>}>
-					<MemberList />
-				</Suspense>
+				<div className="suspense-loading">
+					<Suspense
+						fallback={<div className="suspense-loading">Loading...</div>}
+					>
+						<MemberList />
+					</Suspense>
+				</div>
 			</ErrorBoundary>
 		</div>
 	);
