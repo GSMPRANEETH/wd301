@@ -1,4 +1,4 @@
-import type { Comment, CommentState, CommentAction } from "./types";
+import type { CommentState, CommentAction } from "./types";
 
 export const initialState: CommentState = {
 	all: [],
