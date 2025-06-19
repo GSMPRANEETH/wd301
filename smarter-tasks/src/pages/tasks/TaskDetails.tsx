@@ -40,21 +40,18 @@ export default function TaskDetails() {
 	const commentState = useCommentState();
 	const commentDispatch = useCommentDispatch();
 
-	const [newComment, setNewComment] = useState<string>("");
+	const [newComment, setNewComment] = useState("");
 
-	// Check if state is ready
 	if (!projectState || projectState.isLoading) return <>Loading...</>;
 	if (!taskState || taskState.isLoading) return <>Loading...</>;
 
-	// Get task and project
 	const project = projectState.projects.find((p) => String(p.id) === projectID);
 	const task = taskState.projectData.tasks[taskID!];
 	if (!project) return <div>No such project!</div>;
 	if (!task) return <div>No such task!</div>;
 
-	// Form setup
 	const initialPerson = task.assignedUserName || "";
-	const [selectedPerson, setSelectedPerson] = useState<string>(initialPerson);
+	const [selectedPerson, setSelectedPerson] = useState(initialPerson);
 
 	const {
 		register,
@@ -135,10 +132,7 @@ export default function TaskDetails() {
 							leaveTo="opacity-0 scale-95"
 						>
 							<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl transition-all">
-								<Dialog.Title
-									as="h3"
-									className="text-lg font-medium text-gray-900"
-								>
+								<Dialog.Title className="text-lg font-medium text-gray-900">
 									Task Details
 								</Dialog.Title>
 
@@ -180,7 +174,7 @@ export default function TaskDetails() {
 											value={selectedPerson}
 											onChange={setSelectedPerson}
 										>
-											<Listbox.Button className="w-full border rounded px-3 py-2 text-left">
+											<Listbox.Button className="w-full border rounded(px-3 py-2) text-left">
 												{selectedPerson || "Select member"}
 											</Listbox.Button>
 											<Listbox.Options className="absolute mt-1 w-full bg-white shadow rounded max-h-40 overflow-auto">
@@ -243,17 +237,22 @@ export default function TaskDetails() {
 								</div>
 
 								<div className="space-y-2 max-h-48 overflow-auto">
-									{[...commentState.allIds].map((id) => {
-										const comment = commentState.byId[id];
-										return (
-											<div
-												key={comment.id}
-												className="comment p-2 border rounded"
-											>
-												<p className="text-sm">{comment.text}</p>
-											</div>
-										);
-									})}
+									{commentState.all.map((c) => (
+										<div key={c.id} className="comment p-2 border rounded">
+											<p className="font-semibold">
+												{memberState.members.find((m) => m.id === c.owner)
+													?.name ?? "Unknown"}
+											</p>
+
+											<p className="text-xs">
+												{new Date(c.updatedAt).toLocaleString()}
+											</p>
+											<p className="mt-1">{c.content}</p>
+										</div>
+									))}
+									{commentState.all.length === 0 && (
+										<p className="italic text-gray-500">No comments yet.</p>
+									)}
 								</div>
 							</Dialog.Panel>
 						</Transition.Child>

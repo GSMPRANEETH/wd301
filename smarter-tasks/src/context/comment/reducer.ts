@@ -1,74 +1,29 @@
-import type { Comment } from "./types";
-
-export interface CommentState {
-	byId: Record<number, Comment>;
-	allIds: number[];
-	isLoading: boolean;
-	error?: string;
-}
+import type { Comment, CommentState, CommentAction } from "./types";
 
 export const initialState: CommentState = {
-	byId: {},
-	allIds: [],
+	all: [],
 	isLoading: false,
+	error: undefined,
 };
 
-export type CommentActions =
-	| { type: "FETCH_COMMENTS_REQUEST" }
-	| { type: "FETCH_COMMENTS_SUCCESS"; payload: Comment[] }
-	| { type: "FETCH_COMMENTS_FAILURE"; payload: string }
-	| { type: "ADD_COMMENT_REQUEST" }
-	| { type: "ADD_COMMENT_SUCCESS"; payload: Comment }
-	| { type: "ADD_COMMENT_FAILURE"; payload: string }
-	| { type: "CLEAR_COMMENTS" };
-
-export const reducer = (
+export function reducer(
 	state: CommentState,
-	action: CommentActions
-): CommentState => {
+	action: CommentAction
+): CommentState {
 	switch (action.type) {
 		case "FETCH_COMMENTS_REQUEST":
-			return { ...state, isLoading: true };
+		case "ADD_COMMENT_REQUEST":
+			return { ...state, isLoading: true, error: undefined };
 
-		case "FETCH_COMMENTS_SUCCESS": {
-			const byId: Record<number, Comment> = {};
-			const allIds: number[] = [];
+		case "FETCH_COMMENTS_SUCCESS":
+			return { all: action.payload, isLoading: false, error: undefined };
 
-			action.payload.forEach((c) => {
-				byId[c.id] = c;
-				allIds.push(c.id);
-			});
-
+		case "ADD_COMMENT_SUCCESS":
 			return {
-				...state,
-				byId,
-				allIds: allIds.sort(
-					(a, b) =>
-						new Date(byId[b].timestamp).getTime() -
-						new Date(byId[a].timestamp).getTime()
-				),
+				all: [action.payload, ...state.all],
 				isLoading: false,
+				error: undefined,
 			};
-		}
-
-		case "ADD_COMMENT_SUCCESS": {
-			const updatedById = {
-				...state.byId,
-				[action.payload.id]: action.payload,
-			};
-
-			const updatedAllIds = [...state.allIds, action.payload.id];
-
-			return {
-				...state,
-				byId: updatedById,
-				allIds: updatedAllIds.sort(
-					(a, b) =>
-						new Date(updatedById[b].timestamp).getTime() -
-						new Date(updatedById[a].timestamp).getTime()
-				),
-			};
-		}
 
 		case "FETCH_COMMENTS_FAILURE":
 		case "ADD_COMMENT_FAILURE":
@@ -80,4 +35,4 @@ export const reducer = (
 		default:
 			return state;
 	}
-};
+}

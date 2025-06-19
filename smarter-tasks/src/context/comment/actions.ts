@@ -1,66 +1,65 @@
 import { API_ENDPOINT } from "../../config/constants";
-import type { Comment } from "./types";
+import type { Comment, CommentAction } from "./types";
 
-// FETCH COMMENTS
-export const fetchComments = async (
-	dispatch: React.Dispatch<any>,
+function normalize(raw: any): Comment {
+	return {
+		id: raw.id,
+		content: raw.content ?? raw.description ?? raw.text ?? "",
+		updatedAt: raw.updatedAt ?? raw.timestamp ?? raw.createdAt ?? "",
+		owner: raw.owner ?? raw.userId ?? 0,
+	};
+}
+
+export async function fetchComments(
+	dispatch: React.Dispatch<CommentAction>,
 	projectId: string,
 	taskId: string
-): Promise<void> => {
-	const token = localStorage.getItem("authToken") ?? "";
-
+) {
 	dispatch({ type: "FETCH_COMMENTS_REQUEST" });
-
 	try {
-		const response = await fetch(
+		const token = localStorage.getItem("authToken") ?? "";
+		const res = await fetch(
 			`${API_ENDPOINT}/projects/${projectId}/tasks/${taskId}/comments`,
 			{
-				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
 			}
 		);
+		if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+		const data = await res.json();
+		console.log("💥 RAW COMMENTS PAYLOAD:", data);
 
-		const data: Comment[] = await response.json();
-		console.log("[fetchComments] response data:", data);
-
-		const normalized = data
+		const list: any[] = Array.isArray(data)
+			? data
+			: Array.isArray(data.comments)
+			? data.comments
+			: Array.isArray(data.data)
+			? data.data
+			: [];
+		const comments = list
+			.map(normalize)
 			.sort(
 				(a, b) =>
-					new Date(b.updatedAt ?? b.timestamp ?? 0).getTime() -
-					new Date(a.updatedAt ?? a.timestamp ?? 0).getTime()
-			)
-			.map((c: any) => ({
-				id: c.id,
-				text: c.description ?? "",
-				timestamp: c.updatedAt ?? c.timestamp ?? new Date().toISOString(),
-				updatedAt: c.updatedAt ?? new Date().toISOString(),
-			}));
-
-		dispatch({ type: "FETCH_COMMENTS_SUCCESS", payload: normalized });
-	} catch (error: any) {
-		dispatch({
-			type: "FETCH_COMMENTS_FAILURE",
-			payload: error.message || "Unable to load comments",
-		});
+					new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+			);
+		dispatch({ type: "FETCH_COMMENTS_SUCCESS", payload: comments });
+	} catch (e) {
+		dispatch({ type: "FETCH_COMMENTS_FAILURE", payload: (e as Error).message });
 	}
-};
+}
 
-// POST COMMENT
-export const addComment = async (
-	dispatch: React.Dispatch<any>,
+export async function addComment(
+	dispatch: React.Dispatch<CommentAction>,
 	projectId: string,
 	taskId: string,
-	text: string
-): Promise<{ ok: boolean; error?: string }> => {
-	const token = localStorage.getItem("authToken") ?? "";
-
+	content: string
+): Promise<{ ok: boolean; error?: string }> {
 	dispatch({ type: "ADD_COMMENT_REQUEST" });
-
 	try {
-		const response = await fetch(
+		const token = localStorage.getItem("authToken") ?? "";
+		const res = await fetch(
 			`${API_ENDPOINT}/projects/${projectId}/tasks/${taskId}/comments`,
 			{
 				method: "POST",
@@ -68,34 +67,22 @@ export const addComment = async (
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${token}`,
 				},
-				body: JSON.stringify({ description: text }),
+				body: JSON.stringify({ description: content }),
 			}
 		);
+		const data = await res.json();
+		console.log("💥 RAW NEW COMMENT:", data);
 
-		const data = await response.json();
-		console.log("[addComment] raw response:", data);
-
-		if (!response.ok) {
-			const message = data.errors?.[0]?.message || "Failed to post comment";
-			dispatch({ type: "ADD_COMMENT_FAILURE", payload: message });
-			return { ok: false, error: message };
-		}
-
-		const comment: Comment = {
-			id: data.id,
-			text: data.description ?? "",
-			timestamp: data.updatedAt ?? new Date().toISOString(),
-			updatedAt: data.updatedAt ?? new Date().toISOString(), // ✅ Required field
-			authorName: "", // You can enhance this later
-		};
-
+		if (!res.ok)
+			throw new Error(
+				data.errors?.[0]?.message || `Add failed (${res.status})`
+			);
+		const comment = normalize(data.comment ?? data);
 		dispatch({ type: "ADD_COMMENT_SUCCESS", payload: comment });
 		return { ok: true };
-	} catch (error: any) {
-		dispatch({
-			type: "ADD_COMMENT_FAILURE",
-			payload: error.message || "Unexpected error",
-		});
-		return { ok: false, error: error.message || "Unexpected error" };
+	} catch (e) {
+		const msg = (e as Error).message;
+		dispatch({ type: "ADD_COMMENT_FAILURE", payload: msg });
+		return { ok: false, error: msg };
 	}
-};
+}
