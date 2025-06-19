@@ -247,13 +247,7 @@ export default function TaskDetails() {
 										const comment = commentState.byId[id];
 										return (
 											<div key={comment.id} className=" p-2 border rounded">
-												<div className="comment text-sm">
-													{comment.text?.trim() ? (
-														comment.text
-													) : (
-														<i className="text-gray-400">(no content)</i>
-													)}
-												</div>
+												<div className="comment text-sm">{comment.text}</div>
 											</div>
 										);
 									})}
