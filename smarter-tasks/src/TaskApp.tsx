@@ -21,6 +21,12 @@ const TaskApp = () => {
 		});
 	};
 
+	const removeTask = (task: TaskItem) => {
+		setTaskAppState({
+			tasks: taskAppState.tasks.filter((t) => t.id !== task.id),
+		});
+	};
+
 	return (
 		<div className="container py-10 max-w-7xl mx-auto">
 			<h1 className="text-3xl mb-2 font-bold text-slate-700">Smarter Tasks</h1>
@@ -28,14 +34,12 @@ const TaskApp = () => {
 				<span className="font-bold">Project: </span>
 				Graduation Final Year Project (Revamp college website)
 			</h1>
-			<div className="grid grid-cols-2 gap-4">
-				<div className="border border-slate-200 rounded-xl p-4">
-					<h1 className="text-slate-500 text-xl font-bold text-center mb-2">
-						Pending
-					</h1>
-					<TaskForm addTask={addTask} />
-					<TaskList tasks={taskAppState.tasks} />
-				</div>
+			<div className="border border-slate-200 rounded-xl p-4">
+				<h1 className="text-slate-500 text-xl font-bold text-center mb-2">
+					Pending
+				</h1>
+				<TaskForm addTask={addTask} />
+				<TaskList tasks={taskAppState.tasks} removeTask={removeTask} />
 			</div>
 		</div>
 	);

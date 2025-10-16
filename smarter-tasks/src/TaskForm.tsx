@@ -6,14 +6,14 @@ interface TaskFormProps {
 interface TaskFormState {
 	title: string;
 	description: string;
-	dueDate: Date;
+	dueDate: string;
 }
 
 const TaskForm = (props: TaskFormProps) => {
 	const [formState, setFormState] = useState<TaskFormState>({
 		title: "",
 		description: "",
-		dueDate: new Date(),
+		dueDate: "",
 	});
 
 	const titleChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -32,18 +32,19 @@ const TaskForm = (props: TaskFormProps) => {
 		event
 	) => {
 		console.log(`${new Date(event.target.value).toLocaleDateString()}`);
-		setFormState({ ...formState, dueDate: new Date(event.target.value) });
+		setFormState({ ...formState, dueDate: event.target.value });
 	};
 
 	const addTask: React.FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
 		const newTask = {
+			id: crypto.randomUUID(),
 			title: formState.title,
 			description: formState.description,
 			dueDate: formState.dueDate,
 		};
 		props.addTask(newTask);
-		setFormState({ title: "", description: "", dueDate: new Date() });
+		setFormState({ title: "", description: "", dueDate: "" });
 	};
 
 	return (
@@ -88,7 +89,7 @@ const TaskForm = (props: TaskFormProps) => {
 						id="todoDueDate"
 						name="todoDueDate"
 						type="date"
-						value={formState.dueDate.toISOString().split("T")[0]}
+						value={formState.dueDate}
 						onChange={dueDateChanged}
 						className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
 						placeholder=" "

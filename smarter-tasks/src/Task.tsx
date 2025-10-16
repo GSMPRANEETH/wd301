@@ -1,25 +1,32 @@
 import "./TaskCard.css";
+import type { TaskItem } from "./types";
 
-interface TaskProp {
-	title: String;
-	description: String;
-	dueDate: Date;
+interface TaskProps {
+	item: TaskItem;
+	removeTask: (task: TaskItem) => void;
 }
-
-const Task = (props: TaskProp) => {
+const Task = (props: TaskProps) => {
+	const { item, removeTask } = props;
 	return (
 		<div className="TaskItem shadow-md border border-slate-100">
-			<h3 className="text-base font-bold my-1">{props.title}</h3>
-			<p className="text-sm text-slate-500">
-				Due Date: {props.dueDate.toLocaleDateString()}
-			</p>
-			<p className="text-sm text-slate-500">Description: {props.description}</p>
-			<button
-				id="deleteTaskButton"
-				className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-			>
-				Delete Task
-			</button>
+			<div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+				<div>
+					<a href={`/tasks/${item.id || ""}`}>
+						<h2 className="text-base font-bold my-1">{item.title}</h2>
+					</a>
+					<p className="text-sm text-slate-500">{item.dueDate}</p>
+					<p className="text-sm text-slate-500">
+						Description: {item.description}
+					</p>
+				</div>
+
+				<button
+					className="deleteTaskButton cursor-pointer flex items-center justify-center h-4 w-4 rounded-full my-5 mr-5"
+					onClick={() => removeTask(item)}
+				>
+					X
+				</button>
+			</div>
 		</div>
 	);
 };
