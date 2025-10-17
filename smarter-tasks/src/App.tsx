@@ -1,71 +1,43 @@
-import Layout from "./Layout";
-import HomePage from "./pages/HomePage";
-import Signin from "./pages/Signin";
-import TaskDetailsPage from "./pages/TaskDetailsPage";
-import TaskListPage from "./pages/TaskListPage";
-import {
-	createBrowserRouter,
-	Navigate,
-	RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Notfound from "./pages/Notfound";
+import Signup from "./pages/signup";
+import Signin from "./pages/signin";
 import ProtectedRoute from "./ProtectedRoute";
-import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/dashboard";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Navigate to="/signin" replace />,
+		element: <Signup />,
+	},
+	{
+		path: "/signup",
+		element: <Signup />,
 	},
 	{
 		path: "/signin",
 		element: <Signin />,
 	},
 	{
-		element: (
-			<ProtectedRoute>
-				<Layout />
-			</ProtectedRoute>
-		),
-		children: [
-			{
-				path: "/home",
-				element: <HomePage />,
-			},
-			{
-				path: "tasks",
-				element: <TaskListPage />,
-			},
-			{
-				path: "tasks/:id",
-				element: <TaskDetailsPage />,
-			},
-		],
-	},
-	{
 		path: "/notfound",
+		element: <Notfound />,
+	},
+	{
+		path: "/dashboard",
 		element: (
 			<ProtectedRoute>
-				<NotFound />
+				<Dashboard />
 			</ProtectedRoute>
 		),
 	},
 	{
-		element: (
-			<ProtectedRoute>
-				<NotFound />
-			</ProtectedRoute>
-		),
-		children: [
-			{
-				path: "*",
-				element: <Navigate to="/notfound" replace />,
-			},
-		],
+		path: "*",
+		element: <Notfound />,
 	},
 ]);
 
-function App() {
+const App = () => {
 	return <RouterProvider router={router} />;
-}
+};
 
 export default App;
