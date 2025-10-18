@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { API_ENDPOINT } from "../../config/constants";
 import { useNavigate } from "react-router-dom";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 const SigninForm: React.FC = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	type Inputs = {
+		email: String;
+		password: String;
+	};
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Inputs>();
 
 	const navigate = useNavigate();
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+		const email = data.email;
+		const password = data.password;
 
 		try {
 			const response = await fetch(`${API_ENDPOINT}/users/sign_in`, {
@@ -25,7 +35,7 @@ const SigninForm: React.FC = () => {
 			const data = await response.json();
 			localStorage.setItem("authToken", data.token);
 			localStorage.setItem("userData", JSON.stringify(data.user));
-			navigate("/dashboard");
+			navigate("/account");
 		} catch (error) {
 			console.log(error);
 		}
@@ -35,17 +45,16 @@ const SigninForm: React.FC = () => {
 	console.log(`localStorage authToken = ${authToken}`);
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit(onSubmit)}>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">Email:</label>
 				<input
 					type="email"
-					name="email"
 					id="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					{...register("email", { required: true })}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.email && <span>Invalid Email</span>}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -53,12 +62,11 @@ const SigninForm: React.FC = () => {
 				</label>
 				<input
 					type="password"
-					name="password"
 					id="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					{...register("password", { required: true })}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.password && <span>Invalid Password</span>}
 			</div>
 			<button
 				type="submit"

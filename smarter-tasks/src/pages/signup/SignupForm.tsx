@@ -1,16 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { API_ENDPOINT } from "../../config/constants";
 import { useNavigate } from "react-router-dom";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 const SignupForm: React.FC = () => {
-	const [organisationName, setOrganisationName] = useState("");
-	const [userName, setUserName] = useState("");
-	const [userEmail, setUserEmail] = useState("");
-	const [userPassword, setUserPassword] = useState("");
 	const navigate = useNavigate();
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	type Inputs = {
+		organisationName: string;
+		userName: string;
+		userEmail: string;
+		userPassword: string;
+	};
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Inputs>();
+
+	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+		const organisationName = data.organisationName;
+		const userName = data.organisationName;
+		const userEmail = data.userEmail;
+		const userPassword = data.userPassword;
 
 		try {
 			const response = await fetch(`${API_ENDPOINT}/organisations`, {
@@ -28,7 +41,7 @@ const SignupForm: React.FC = () => {
 				throw new Error("Sign-up failed");
 			}
 			console.log("Sign-up successful");
-			navigate("/dashboard");
+			navigate("/account");
 			// Dialogue: After successful signup we have to redirect the user to the secured page. We will do that later.
 		} catch (error) {
 			console.error("Sign-up failed:", error);
@@ -36,19 +49,17 @@ const SignupForm: React.FC = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit(onSubmit)}>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
 					Organisation Name:
 				</label>
 				<input
 					type="text"
-					name="organisationName"
 					id="organisationName"
-					value={organisationName}
-					onChange={(e) => setOrganisationName(e.target.value)}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.organisationName && <span>Organization name is required</span>}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -56,23 +67,21 @@ const SignupForm: React.FC = () => {
 				</label>
 				<input
 					type="text"
-					name="userName"
 					id="userName"
-					value={userName}
-					onChange={(e) => setUserName(e.target.value)}
+					{...register("userName", { required: true })}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.userName && <span>User name is required</span>}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">Email:</label>
 				<input
 					type="email"
-					name="userEmail"
 					id="userEmail"
-					value={userEmail}
-					onChange={(e) => setUserEmail(e.target.value)}
+					{...register("userEmail", { required: true })}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.userEmail && <span>Email is required</span>}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -80,12 +89,11 @@ const SignupForm: React.FC = () => {
 				</label>
 				<input
 					type="password"
-					name="userPassword"
 					id="userPassword"
-					value={userPassword}
-					onChange={(e) => setUserPassword(e.target.value)}
+					{...register("userPassword", { required: true })}
 					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 				/>
+				{errors.userPassword && <span>Create a password</span>}
 			</div>
 			<button
 				type="submit"
