@@ -1,15 +1,7 @@
-import { useEffect } from "react";
-import { fetchProjects } from "../../context/projects/actions";
-import { useProjectsDispatch } from "../../context/projects/context";
+import React from "react";
 import ProjectListItems from "./ProjectListItems";
 
-const ProjecTList: React.FC = () => {
-	const dispatchProjects = useProjectsDispatch();
-
-	useEffect(() => {
-		fetchProjects(dispatchProjects);
-	}, []);
-
+const ProjectList: React.FC = () => {
 	return (
 		<div className="grid gap-4 grid-cols-4 mt-5">
 			<ProjectListItems />
@@ -17,4 +9,4 @@ const ProjecTList: React.FC = () => {
 	);
 };
 
-export default ProjecTList;
+export default ProjectList;
