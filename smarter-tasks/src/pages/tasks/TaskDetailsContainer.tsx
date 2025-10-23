@@ -3,6 +3,7 @@ import { useProjectsState } from "../../context/projects/context";
 import { useTasksState } from "../../context/task/context";
 import TaskDetails from "./TaskDetails";
 import { useParams } from "react-router-dom";
+import { CommentsProvider } from "../../context/comments/context";
 
 const TaskDetailsContainer = () => {
 	let { taskID } = useParams();
@@ -19,7 +20,11 @@ const TaskDetailsContainer = () => {
 		return <>No such task!</>;
 	}
 
-	return <TaskDetails />;
+	return (
+		<CommentsProvider>
+			<TaskDetails />;
+		</CommentsProvider>
+	);
 };
 
 export default TaskDetailsContainer;

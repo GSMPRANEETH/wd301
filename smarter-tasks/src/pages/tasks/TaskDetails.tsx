@@ -1,16 +1,22 @@
 import { Dialog, Transition, Listbox } from "@headlessui/react";
-import React, { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useTasksDispatch, useTasksState } from "../../context/task/context";
-import { updateTask } from "../../context/task/actions";
 import { useMembersState } from "../../context/members/context";
 import { useProjectsState } from "../../context/projects/context";
 import type { TaskDetailsPayload } from "../../context/task/types";
 import CheckIcon from "@heroicons/react/24/outline/CheckIcon";
+import {
+	useCommentsDispatch,
+	useCommentsState,
+} from "../../context/comments/context";
+import { addComment, getComments } from "../../context/comments/actions";
+import { updateTask } from "../../context/task/actions";
 
 type TaskFormUpdatePayload = TaskDetailsPayload & {
 	selectedPerson: string;
+	commentBox: string;
 };
 
 // Helper function to format the date to YYYY-MM-DD format
@@ -33,29 +39,34 @@ const TaskDetails = () => {
 	// Extract project and task details.
 	const projectState = useProjectsState();
 	const taskListState = useTasksState();
-	const taskDispatch = useTasksDispatch();
 	const memberState = useMembersState();
 	const selectedProject = projectState?.projects.filter(
 		(project) => `${project.id}` === projectID
 	)[0];
+	const commentsState = useCommentsState();
+	const commentsDispatch = useCommentsDispatch();
 
 	const selectedTask = taskListState.projectData.tasks[taskID ?? ""];
 	// Use react-form-hook to manage the form. Initialize with data from selectedTask.
 	const [selectedPerson, setSelectedPerson] = useState(
 		selectedTask.assignedUserName ?? ""
 	);
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<TaskFormUpdatePayload>({
+	const taskDispatch = useTasksDispatch();
+	const { register, handleSubmit } = useForm<TaskFormUpdatePayload>({
 		defaultValues: {
 			title: selectedTask.title,
 			description: selectedTask.description,
 			selectedPerson: selectedTask.assignedUserName,
 			dueDate: formatDateForPicker(selectedTask.dueDate),
+			commentBox: "",
 		},
 	});
+
+	useEffect(() => {
+		if (projectID && taskID) {
+			getComments(commentsDispatch, projectID, taskID);
+		}
+	}, [projectID, taskID, commentsDispatch]);
 
 	if (!selectedProject) {
 		return <>No such Project!</>;
@@ -65,6 +76,7 @@ const TaskDetails = () => {
 		setIsOpen(false);
 		navigate("../");
 	}
+
 	const onSubmit: SubmitHandler<TaskFormUpdatePayload> = async (data) => {
 		const assignee = memberState?.users.filter(
 			(member) => member.name === selectedPerson
@@ -76,6 +88,24 @@ const TaskDetails = () => {
 		});
 		closeModal();
 	};
+	const onAddComment: SubmitHandler<TaskFormUpdatePayload> = async (data) => {
+		const assignee = memberState?.users?.find(
+			(member) => member.name === selectedPerson
+		);
+		if (!data.commentBox?.trim()) return;
+		await addComment(commentsDispatch, projectID ?? "", taskID ?? "", {
+			description: data.commentBox,
+			owner: assignee?.id ?? 0,
+			task_id: parseInt(taskID ?? "0"),
+		});
+	};
+
+	const getMember = (ownerID: number) => {
+		const member = memberState?.users.filter((user) => ownerID === user.id);
+		return member?.[0]?.name ?? "Unknown";
+	};
+
+	console.log("Comments from taskdetails ", commentsState.comments);
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
@@ -112,25 +142,31 @@ const TaskDetails = () => {
 									</Dialog.Title>
 									<div className="mt-2">
 										<form onSubmit={handleSubmit(onSubmit)}>
+											<h3>
+												<strong>Title</strong>
+											</h3>
 											<input
 												type="text"
-												required
 												placeholder="Enter title"
 												id="title"
 												{...register("title", { required: true })}
 												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 											/>
+											<h3>
+												<strong>Description</strong>
+											</h3>
 											<input
 												type="text"
-												required
 												placeholder="Enter description"
 												id="description"
-												{...register("description", { required: true })}
+												{...register("description")}
 												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
 											/>
+											<h3>
+												<strong>Date</strong>
+											</h3>
 											<input
 												type="date"
-												required
 												placeholder="Enter due date"
 												id="dueDate"
 												{...register("dueDate", { required: true })}
@@ -144,10 +180,10 @@ const TaskDetails = () => {
 												onChange={setSelectedPerson}
 											>
 												<Listbox.Button className="w-full border rounded-md py-2 px-3 my-2 text-gray-700 text-base text-left">
-													{selectedPerson}
+													{selectedPerson || "Select assignee"}
 												</Listbox.Button>
-												<Listbox.Options className="absolute mt-1 max-h-60 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-													{memberState?.users.map((person) => (
+												<Listbox.Options className="max-w absolute mt-1 max-h-60 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+													{memberState?.users?.map((person) => (
 														<Listbox.Option
 															key={person.id}
 															className={({ active }) =>
@@ -182,6 +218,38 @@ const TaskDetails = () => {
 													))}
 												</Listbox.Options>
 											</Listbox>
+
+											<div className="flex flex-col space-y-4 mb-4">
+												<h3>
+													<strong>Comments:</strong>
+												</h3>
+												{commentsState.comments.length > 0
+													? commentsState.comments.map((comment) => (
+															<div key={comment.id} className="comment">
+																<p>
+																	<b>Name: </b>
+																	{getMember(comment.owner)}
+																</p>
+																<p>{comment.description}</p>
+															</div>
+													  ))
+													: "No comments yet"}
+												<input
+													type="text"
+													{...register("commentBox")}
+													id="commentBox"
+													placeholder="Type your comment..."
+												/>
+												<button
+													type="button"
+													id="addCommentBtn"
+													onClick={handleSubmit(onAddComment)}
+													className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+												>
+													Add Comment
+												</button>
+											</div>
+
 											<button
 												type="submit"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -189,7 +257,7 @@ const TaskDetails = () => {
 												Update
 											</button>
 											<button
-												type="submit"
+												type="button"
 												onClick={closeModal}
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 											>
