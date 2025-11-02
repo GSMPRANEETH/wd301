@@ -31,18 +31,14 @@ const SigninForm: React.FC = () => {
 			if (!response.ok) {
 				throw new Error("Sign-in failed!");
 			}
-			console.log("Sign-in sucessful");
 			const data = await response.json();
 			localStorage.setItem("authToken", data.token);
 			localStorage.setItem("userData", JSON.stringify(data.user));
 			navigate("/account");
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
-
-	const authToken = localStorage.getItem("authToken");
-	console.log(`localStorage authToken = ${authToken}`);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -52,9 +48,15 @@ const SigninForm: React.FC = () => {
 					type="email"
 					id="email"
 					{...register("email", { required: true })}
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.email ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.email && <span>Invalid Email</span>}
+				{errors.email && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						Invalid Email
+					</span>
+				)}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -64,15 +66,30 @@ const SigninForm: React.FC = () => {
 					type="password"
 					id="password"
 					{...register("password", { required: true })}
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.password ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.password && <span>Invalid Password</span>}
+				{errors.password && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						Invalid Password
+					</span>
+				)}
 			</div>
 			<button
 				type="submit"
 				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
 			>
 				Sign In
+			</button>
+			<button
+				type="button"
+				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
+				onClick={() => {
+					navigate("/signup");
+				}}
+			>
+				No account? Sign up here
 			</button>
 		</form>
 	);

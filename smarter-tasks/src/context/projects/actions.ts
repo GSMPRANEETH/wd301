@@ -15,7 +15,6 @@ export const fetchProjects = async (dispatch: any) => {
 		const data = await response.json();
 		dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: data });
 	} catch (error) {
-		console.log("Error fetching projects:", error);
 		dispatch({
 			type: "FETCH_PROJECTS_FAILURE",
 			payload: "Unable to load projects",
@@ -59,11 +58,11 @@ export const addProject = async (dispatch: any, args: any) => {
 	}
 };
 
-export const getProjectDetails = async (args: any) => {
+export const getProjectDetails = async (dispatch: any, args: any) => {
 	try {
 		const token = localStorage.getItem("authToken");
 		const { projectID } = args;
-		console.log(`Recieved ${projectID}`);
+		dispatch({ type: "FETCH_PROJECT_REQUEST" });
 		const response = await fetch(`${API_ENDPOINT}/projects/${projectID}`, {
 			method: "GET",
 			headers: {
@@ -75,10 +74,10 @@ export const getProjectDetails = async (args: any) => {
 			throw new Error("Failed to get project details");
 		}
 		const data = await response.json();
-		console.log(data);
+		dispatch({ type: "FETCH_PROJECT_SUCCESS" });
 		return { ok: true, data };
 	} catch (error) {
-		console.error(`Error in fetching project detials`, error);
+		dispatch({ type: "FETCH_PROJECT_FAILURE", payload: error });
 	}
 };
 
@@ -92,6 +91,7 @@ export const updateProject = async (
 	const token = localStorage.getItem("authToken");
 	const { id, data } = args;
 	try {
+		dispatch({ type: "UPDATE_PROJECT_REQUEST" });
 		const response = await fetch(`${API_ENDPOINT}/projects/${id}`, {
 			method: "PATCH",
 			headers: {
@@ -103,12 +103,9 @@ export const updateProject = async (
 		if (!response.ok) {
 			throw new Error("Failed to patch project");
 		}
-		const updated = await response.json();
-		console.log("updated: ", updated);
+		dispatch({ type: "UPDATE_PROJECT_SUCCESS" });
 		fetchProjects(dispatch);
-		return { ok: true };
 	} catch (error) {
-		console.error("Error patching project: ", error);
-		return { ok: false, error: error };
+		dispatch({ type: "UPDATE_PROJECT_FAILURE", payload: error });
 	}
 };

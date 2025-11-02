@@ -19,15 +19,8 @@ const Appbar = () => {
 	const [enabled, setEnabled] = useState(theme === "light" ? false : true);
 
 	const toggleTheme = () => {
-		let newTheme = "";
-		if (theme === "light") {
-			newTheme = "dark";
-		} else {
-			newTheme = "light";
-		}
 		setEnabled(!enabled);
-		setTheme(newTheme);
-		localStorage.setItem("theme", newTheme);
+		setTheme(enabled ? "light" : "dark");
 	};
 
 	const { pathname } = useLocation();

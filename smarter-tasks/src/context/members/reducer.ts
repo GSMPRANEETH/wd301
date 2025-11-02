@@ -19,7 +19,10 @@ export type MemberActions =
 	| { type: "DELETE_MEMBER_SUCCESS"; payload: number }
 	| { type: "UPDATE_MEMBER_REQUEST" }
 	| { type: "UPDATE_MEMBER_FAILURE"; payload: string }
-	| { type: "UPDATE_MEMBER_SUCCESS" };
+	| { type: "UPDATE_MEMBER_SUCCESS" }
+	| { type: "FETCH_MEMBER_REQUEST" }
+	| { type: "FETCH_MEMBER_SUCCESS" }
+	| { type: "FETCH_MEMBER_FAILURE"; payload: string };
 
 export const initialState: MembersState = {
 	users: [],
@@ -74,6 +77,23 @@ export const reducer = (
 			return {
 				...state,
 				isLoading: false,
+			};
+		case "FETCH_MEMBER_REQUEST":
+			return {
+				...state,
+				isLoading: true,
+			};
+		case "FETCH_MEMBER_SUCCESS":
+			return {
+				...state,
+				isLoading: false,
+			};
+		case "FETCH_MEMBER_FAILURE":
+			return {
+				...state,
+				isLoading: false,
+				isError: true,
+				errorMessage: action.payload,
 			};
 		default:
 			return state;

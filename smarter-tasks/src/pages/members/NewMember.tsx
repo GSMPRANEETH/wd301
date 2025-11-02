@@ -88,30 +88,48 @@ const NewMember = () => {
 												autoFocus
 												{...register("name", { required: true })}
 												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.name ? "border-red-500" : ""
+													errors.name
+														? "border-red-500 focus:border-red-500"
+														: ""
 												}`}
 											/>
-											{errors.name && <span>This field is required</span>}
+											{errors.name && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<input
 												type="email"
 												placeholder="Enter member email..."
 												autoFocus
 												{...register("email", { required: true })}
 												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.email ? "border-red-500" : ""
+													errors.email
+														? "border-red-500 focus:border-red-500"
+														: ""
 												}`}
 											/>
-											{errors.email && <span>This field is required</span>}
+											{errors.email && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<input
 												type="password"
 												placeholder="Enter password"
 												autoFocus
 												{...register("password", { required: true })}
 												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.password ? "border-red-500" : ""
+													errors.password
+														? "border-red-500 focus:border-red-500"
+														: ""
 												}`}
 											/>
-											{errors.password && <span>This field is required</span>}
+											{errors.password && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<button
 												type="submit"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

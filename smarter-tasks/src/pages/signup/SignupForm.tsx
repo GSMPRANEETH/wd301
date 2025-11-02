@@ -40,7 +40,6 @@ const SignupForm: React.FC = () => {
 			if (!response.ok) {
 				throw new Error("Sign-up failed");
 			}
-			console.log("Sign-up successful");
 			navigate("/account");
 			// Dialogue: After successful signup we have to redirect the user to the secured page. We will do that later.
 		} catch (error) {
@@ -57,9 +56,15 @@ const SignupForm: React.FC = () => {
 				<input
 					type="text"
 					id="organisationName"
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.organisationName ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.organisationName && <span>Organization name is required</span>}
+				{errors.organisationName && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						Organization name is required
+					</span>
+				)}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -69,9 +74,15 @@ const SignupForm: React.FC = () => {
 					type="text"
 					id="userName"
 					{...register("userName", { required: true })}
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.userName ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.userName && <span>User name is required</span>}
+				{errors.userName && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						User name is required
+					</span>
+				)}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">Email:</label>
@@ -79,9 +90,15 @@ const SignupForm: React.FC = () => {
 					type="email"
 					id="userEmail"
 					{...register("userEmail", { required: true })}
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.userEmail ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.userEmail && <span>Email is required</span>}
+				{errors.userEmail && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						Email is required
+					</span>
+				)}
 			</div>
 			<div>
 				<label className="block text-gray-700 font-semibold mb-2">
@@ -91,15 +108,30 @@ const SignupForm: React.FC = () => {
 					type="password"
 					id="userPassword"
 					{...register("userPassword", { required: true })}
-					className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+						errors.userPassword ? "border-red-500 focus:border-red-500" : ""
+					}`}
 				/>
-				{errors.userPassword && <span>Create a password</span>}
+				{errors.userPassword && (
+					<span className="text-red-600 dark:text-red-400 mb-2 block">
+						Create a password
+					</span>
+				)}
 			</div>
 			<button
 				type="submit"
 				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
 			>
 				Sign up
+			</button>
+			<button
+				type="button"
+				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
+				onClick={() => {
+					navigate("/signin");
+				}}
+			>
+				Already have an account? Sign in here
 			</button>
 		</form>
 	);

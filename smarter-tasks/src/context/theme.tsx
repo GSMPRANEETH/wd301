@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 interface ThemeContextProps {
 	theme: string;
@@ -11,8 +11,13 @@ const ThemeContext = createContext<ThemeContextProps>({
 });
 
 const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const localTheme = localStorage.getItem("theme") || "light";
-	const [theme, setTheme] = useState(localTheme);
+	const [theme, setTheme] = useState(
+		() => localStorage.getItem("theme") || "light"
+	);
+
+	useEffect(() => {
+		localStorage.setItem("theme", theme);
+	}, [theme]);
 
 	const valueToShare = {
 		theme: theme,

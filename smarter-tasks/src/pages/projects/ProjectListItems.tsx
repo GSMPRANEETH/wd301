@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 export default function ProjectListItems() {
 	let state: any = useProjectsState();
 	const { projects, isError, errorMessage } = state;
-	console.log(projects);
-
 	if (isError) {
 		return <span>{errorMessage}</span>;
 	}

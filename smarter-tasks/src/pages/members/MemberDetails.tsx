@@ -16,10 +16,11 @@ const MemberDetails: React.FC = () => {
 	let [isOpen, setIsOpen] = useState(true);
 	const { userID } = useParams();
 	const navigate = useNavigate();
+	const membersDispatch = useMembersDispatch();
 
 	// fetch once when userID is available
 	useEffect(() => {
-		if (userID) getUserDetails({ id: userID });
+		if (userID) getUserDetails(membersDispatch, { id: userID });
 	}, [userID]);
 
 	const membersState = useMembersState();
@@ -30,7 +31,11 @@ const MemberDetails: React.FC = () => {
 	const selectedMember =
 		selectedUser && selectedUser.length > 0 ? selectedUser[0] : undefined;
 
-	const { register, handleSubmit } = useForm<Member>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Member>({
 		defaultValues: {
 			name: selectedMember?.name ?? "",
 			email: selectedMember?.email ?? "",
@@ -42,7 +47,6 @@ const MemberDetails: React.FC = () => {
 	}
 
 	const onSubmit: SubmitHandler<Member> = async (data) => {
-		console.log("update button clicked with:", data);
 		const res = await updateUserDetails(dispatchMembers, {
 			id: Number(userID),
 			data,
@@ -98,8 +102,17 @@ const MemberDetails: React.FC = () => {
 												placeholder="Enter name"
 												id="name"
 												{...register("name", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.email
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.name && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<h3>
 												<strong>Email</strong>
 											</h3>
@@ -107,9 +120,18 @@ const MemberDetails: React.FC = () => {
 												type="email"
 												placeholder="Enter user mail ID"
 												id="email"
-												{...register("email")}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												{...register("email", { required: true })}
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.email
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.email && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<button
 												type="submit"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

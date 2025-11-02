@@ -52,7 +52,11 @@ const TaskDetails = () => {
 		selectedTask.assignedUserName ?? ""
 	);
 	const taskDispatch = useTasksDispatch();
-	const { register, handleSubmit } = useForm<TaskFormUpdatePayload>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<TaskFormUpdatePayload>({
 		defaultValues: {
 			title: selectedTask.title,
 			description: selectedTask.description,
@@ -105,7 +109,6 @@ const TaskDetails = () => {
 		return member?.[0]?.name ?? "Unknown";
 	};
 
-	console.log("Comments from taskdetails ", commentsState.comments);
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
@@ -150,8 +153,17 @@ const TaskDetails = () => {
 												placeholder="Enter title"
 												id="title"
 												{...register("title", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.title
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.title && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<h3>
 												<strong>Description</strong>
 											</h3>
@@ -160,8 +172,17 @@ const TaskDetails = () => {
 												placeholder="Enter description"
 												id="description"
 												{...register("description")}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.description
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.description && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													Invalid description
+												</span>
+											)}
 											<h3>
 												<strong>Date</strong>
 											</h3>
@@ -170,8 +191,17 @@ const TaskDetails = () => {
 												placeholder="Enter due date"
 												id="dueDate"
 												{...register("dueDate", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.dueDate
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.dueDate && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<h3>
 												<strong>Assignee</strong>
 											</h3>
@@ -239,7 +269,17 @@ const TaskDetails = () => {
 													{...register("commentBox")}
 													id="commentBox"
 													placeholder="Type your comment..."
+													className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+														errors.commentBox
+															? "border-red-500 focus:border-red-500"
+															: ""
+													}`}
 												/>
+												{errors.commentBox && (
+													<span className="text-red-600 dark:text-red-400 mb-2 block">
+														No comment
+													</span>
+												)}
 												<button
 													type="button"
 													id="addCommentBtn"

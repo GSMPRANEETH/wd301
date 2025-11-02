@@ -16,34 +16,32 @@ const ExportProject: React.FC = () => {
 	let [isOpen, setIsOpen] = useState(true);
 	const navigate = useNavigate();
 	const { projectID } = useParams();
-	useEffect(() => {
-		async function fetchProjectDetails() {
-			const resp = await getProjectDetails({ projectID });
-			console.log(`resp = ${resp?.data?.id} ${resp?.data?.name}, ${resp?.ok}`);
-		}
-		fetchProjectDetails();
-	}, [projectID]);
+
 	const projectState = useProjectsState();
 	const projectDispatch = useProjectsDispatch();
 	const selectedProject = projectState?.projects?.filter(
 		(prjct: Project) => prjct.id === Number(projectID)
 	)[0];
-	const { register, handleSubmit } = useForm<Project>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<Project>({
 		defaultValues: {
 			name: selectedProject?.name ?? "",
 		},
 	});
+	useEffect(() => {
+		async function fetchProjectDetails() {
+			await getProjectDetails(projectDispatch, { projectID });
+		}
+		fetchProjectDetails();
+	}, [projectID]);
 	const onSubmit: SubmitHandler<Project> = async (data) => {
-		console.log(`Clicked update with ${data}`);
-		const res = await updateProject(projectDispatch, {
+		await updateProject(projectDispatch, {
 			id: Number(projectID),
 			data,
 		});
-		if (res.ok) {
-			closeModal();
-		} else {
-			console.log(res.error);
-		}
 	};
 	function closeModal() {
 		setIsOpen(false);
@@ -93,8 +91,17 @@ const ExportProject: React.FC = () => {
 												placeholder="Enter name"
 												id="name"
 												{...register("name", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.name
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.name && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<button
 												type="submit"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

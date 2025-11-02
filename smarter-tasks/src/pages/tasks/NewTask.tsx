@@ -14,7 +14,11 @@ const NewTask = () => {
 	let navigate = useNavigate();
 
 	// Use react-hook-form to create form submission handler and state.
-	const { register, handleSubmit } = useForm<TaskDetailsPayload>();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<TaskDetailsPayload>();
 	const projectState = useProjectsState();
 	const taskDispatch = useTasksDispatch();
 
@@ -38,6 +42,8 @@ const NewTask = () => {
 			console.error("Operation failed:", error);
 		}
 	};
+
+	const today = new Date().toISOString().split("T")[0];
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
@@ -75,34 +81,59 @@ const NewTask = () => {
 										<form onSubmit={handleSubmit(onSubmit)}>
 											<input
 												type="text"
-												required
 												placeholder="Enter title"
 												autoFocus
 												id="title"
 												// Register the title field
 												{...register("title", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.title
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.title && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<input
 												type="text"
-												required
 												placeholder="Enter description"
 												autoFocus
 												id="description"
 												// register the description field
-												{...register("description", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												{...register("description")}
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.description
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.description && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													Invalid description
+												</span>
+											)}
 											<input
 												type="date"
-												required
 												placeholder="Enter due date"
 												autoFocus
 												id="dueDate"
 												// register due date field
 												{...register("dueDate", { required: true })}
-												className="w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue"
+												defaultValue={today}
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+													errors.dueDate
+														? "border-red-500 focus:border-red-500"
+														: ""
+												}`}
 											/>
+											{errors.dueDate && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													This field is required
+												</span>
+											)}
 											<button
 												type="submit"
 												// Set an id for the submit button

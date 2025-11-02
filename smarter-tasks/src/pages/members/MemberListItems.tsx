@@ -9,7 +9,6 @@ export default function MemberListItems() {
 	const dispatchMembers = useMembersDispatch();
 	let state: any = useMembersState();
 	const { users, isLoading, isError, errorMessage } = state;
-	console.log(users);
 	if (users.length === 0 && isLoading) {
 		return <span>Loading...</span>;
 	}
@@ -19,13 +18,9 @@ export default function MemberListItems() {
 
 	const handleDelete = async (data: { id: any }) => {
 		const { id } = data;
-		const response = await deleteUser(dispatchMembers, {
+		await deleteUser(dispatchMembers, {
 			id,
 		});
-		if (response.ok) {
-			console.log(`response ok id is ${id}`);
-		} else {
-		}
 	};
 
 	return (

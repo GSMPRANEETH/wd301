@@ -27,7 +27,6 @@ export const getComments = async (
 			throw new Error("Failed to get comments");
 		}
 		const data = await response.json();
-		console.log("Comments got: ", data);
 		dispatch({
 			type: CommentsAvailableActions.FETCH_COMMENTS_SUCCESS,
 			payload: data,
@@ -63,8 +62,6 @@ export const addComment = async (
 		if (!response.ok) {
 			throw new Error("Failed to create comment");
 		}
-		const data = await response.json();
-		console.log("Comment created: ", data);
 		getComments(dispatch, projectID, taskID);
 		dispatch({
 			type: CommentsAvailableActions.ADD_COMMENT_SUCCESS,

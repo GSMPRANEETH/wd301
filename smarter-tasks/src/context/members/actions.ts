@@ -1,5 +1,5 @@
 import { API_ENDPOINT } from "../../config/constants";
-import type { Member } from "./reducer";
+import type { Member, MemberActions } from "./reducer";
 
 export const fetchMembers = async (dispatch: any) => {
 	const token = localStorage.getItem("authToken") ?? "";
@@ -15,7 +15,6 @@ export const fetchMembers = async (dispatch: any) => {
 		const data = await response.json();
 		dispatch({ type: "FETCH_MEMBERS_SUCCESS", payload: data });
 	} catch (error) {
-		console.log("Error fetching members:", error);
 		dispatch({
 			type: "FETCH_MEMBERS_FAILURE",
 			payload: "Unable to load members",
@@ -41,8 +40,6 @@ export const addMember = async (dispatch: any, args: any) => {
 		if (data.errors && data.errors.length > 0) {
 			return { ok: false, error: data.errors[0].message };
 		}
-		const { name, email } = data.user;
-		console.log(`member created ok ${name} ${email}`);
 		dispatch({ type: "ADD_MEMBER_SUCCESS", payload: data.user });
 
 		return { ok: true };
@@ -56,6 +53,7 @@ export const deleteUser = async (dispatch: any, args: any) => {
 	const token = localStorage.getItem("authToken") ?? "";
 	const { id } = args;
 	try {
+		dispatch({ type: "DELETE_MEMBER_REQUEST" });
 		const response = await fetch(`${API_ENDPOINT}/users/${id}`, {
 			method: "DELETE",
 			headers: {
@@ -67,20 +65,16 @@ export const deleteUser = async (dispatch: any, args: any) => {
 			throw new Error("Member deletion failed");
 		}
 
-		console.log(`member deleted: ${id}`);
 		dispatch({ type: "DELETE_MEMBER_SUCCESS", payload: Number(id) });
-
-		return { ok: true };
 	} catch (error) {
-		console.error("Operation failed:", error);
-		return { ok: false, error };
+		dispatch({ type: "DELETE_MEMBER_FAILURE", payload: error });
 	}
 };
 
-export const getUserDetails = async (args: any) => {
+export const getUserDetails = async (dispatch: any, args: any) => {
 	const token = localStorage.getItem("authToken") ?? "";
 	const { id } = args;
-	console.log(`Got id in actions.ts: ${id}`);
+	dispatch({ type: "FETCH_MEMBER_REQUEST" });
 	try {
 		const response = await fetch(`${API_ENDPOINT}/users/${id}`, {
 			method: "GET",
@@ -92,10 +86,9 @@ export const getUserDetails = async (args: any) => {
 		if (!response.ok) {
 			throw new Error("Member details fetching failed");
 		}
-		const data = await response.json();
-		console.log("Reveived data: ", data);
+		dispatch({ type: "FETCH_MEMBER_SUCCESSS" });
 	} catch (error) {
-		console.log(`Error in fetching member detials of id: ${id}: `, error);
+		dispatch({ type: "FETCH_MEMBER_FAILURE", payload: error });
 	}
 };
 
@@ -122,13 +115,11 @@ export const updateUserDetails = async (
 			throw new Error("Member updating failed");
 		}
 		const updated = await response.json();
-		console.log("updated data:", updated);
 		dispatch({ type: "UPDATE_MEMBER_SUCCESS" });
 		fetchMembers(dispatch);
 		return { ok: true, user: updated as Member };
 	} catch (error) {
 		dispatch({ type: "UPDATE_MEMBER_FAILURE", payload: error });
-		console.log("Updating user details failed", error);
 		return { ok: false, error };
 	}
 };
