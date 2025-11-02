@@ -1,9 +1,10 @@
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import { ThemeContext } from "./context/theme";
 import { ProjectsProvider } from "./context/projects/context";
 import { MembersProvider } from "./context/members/context";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
 	const { theme } = useContext(ThemeContext);
@@ -15,7 +16,11 @@ const App = () => {
 		>
 			<ProjectsProvider>
 				<MembersProvider>
-					<RouterProvider router={router} />
+					<ErrorBoundary>
+						<Suspense fallback={<>Loading...</>}>
+							<RouterProvider router={router} />
+						</Suspense>
+					</ErrorBoundary>
 				</MembersProvider>
 			</ProjectsProvider>
 		</div>
