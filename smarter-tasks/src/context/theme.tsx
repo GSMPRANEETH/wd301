@@ -11,7 +11,8 @@ const ThemeContext = createContext<ThemeContextProps>({
 });
 
 const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [theme, setTheme] = useState("light");
+	const localTheme = localStorage.getItem("theme") || "light";
+	const [theme, setTheme] = useState(localTheme);
 
 	const valueToShare = {
 		theme: theme,

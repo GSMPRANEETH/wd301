@@ -2,6 +2,7 @@ import { Fragment, useState, useContext } from "react";
 import { Disclosure, Menu, Switch, Transition } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/images/logo.png";
+import DarkLogo from "../../assets/images/darklogo.png";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../context/theme";
 
@@ -15,7 +16,7 @@ const classNames = (...classes: string[]): string =>
 
 const Appbar = () => {
 	const { theme, setTheme } = useContext(ThemeContext);
-	const [enabled, setEnabled] = useState(false);
+	const [enabled, setEnabled] = useState(theme === "light" ? false : true);
 
 	const toggleTheme = () => {
 		let newTheme = "";
@@ -26,6 +27,7 @@ const Appbar = () => {
 		}
 		setEnabled(!enabled);
 		setTheme(newTheme);
+		localStorage.setItem("theme", newTheme);
 	};
 
 	const { pathname } = useLocation();
@@ -38,12 +40,16 @@ const Appbar = () => {
 	return (
 		<>
 			<Disclosure as="nav" className="border-b border-slate-200">
-				{({ open }) => (
+				{() => (
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="flex h-16 items-center justify-between">
 							<div className="flex items-center">
 								<div className="flex-shrink-0">
-									<img className="h-8" src={Logo} alt="Smarter Tasks" />
+									{enabled ? (
+										<img className="h-8" src={DarkLogo} alt="Smarter Tasks" />
+									) : (
+										<img className="h-8" src={Logo} alt="Smarter Tasks" />
+									)}
 								</div>
 								<div className="hidden md:block">
 									<div className="ml-10 flex items-baseline space-x-4">
@@ -110,7 +116,7 @@ const Appbar = () => {
 											<Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 												{userNavigation.map((item) => (
 													<Menu.Item key={item.name}>
-														{({ active }) => (
+														{() => (
 															<a
 																href={item.href}
 																className={classNames(

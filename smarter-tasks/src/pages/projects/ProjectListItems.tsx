@@ -1,10 +1,9 @@
-import React from "react";
 import { useProjectsState } from "../../context/projects/context";
 import { Link } from "react-router-dom";
 
 export default function ProjectListItems() {
 	let state: any = useProjectsState();
-	const { projects, isLoading, isError, errorMessage } = state;
+	const { projects, isError, errorMessage } = state;
 	console.log(projects);
 
 	if (isError) {

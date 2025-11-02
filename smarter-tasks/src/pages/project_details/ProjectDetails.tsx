@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useTasksDispatch, useTasksState } from "../../context/task/context";
@@ -29,7 +29,7 @@ const ProjectDetails = () => {
 	return (
 		<>
 			<div className="flex justify-between">
-				<h2 className="text-2xl font-medium tracking-tight text-slate-700">
+				<h2 className="text-2xl font-medium tracking-tight text-slate-700 dark:text-white">
 					{selectedProject.name}
 				</h2>
 				<Link to={`tasks/new`}>

@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef } from "react";
 
 import type { TaskDetails } from "../../context/task/types";
 import "./TaskCard.css";
@@ -18,20 +18,21 @@ const Task = forwardRef<
 	return (
 		<div ref={ref} {...props} className="m-2 flex">
 			<Link
-				className="TaskItem w-full shadow-md border border-slate-100 bg-white"
+				className="TaskItem w-full shadow-md border border-slate bg-white
+             dark:bg-inherit dark:border-white "
 				to={`tasks/${task.id}`}
 			>
 				<div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
 					<div>
 						<h2 className="text-base font-bold my-1">{task.title}</h2>
-						<p className="text-sm text-slate-500">
-							{new Date(task.dueDate).toDateString()}
+						<p className="text-sm">{new Date(task.dueDate).toDateString()}</p>
+						<p className="text-sm">
+							<span className="font-semibold">Description:</span>{" "}
+							{task.description}
 						</p>
-						<p className="text-sm text-slate-500">
-							Description: {task.description}
-						</p>
-						<p className="text-sm text-slate-500">
-							Assignee: {task.assignedUserName ?? "-"}
+						<p className="text-sm">
+							<span className="font-semibold">Assignee:</span>
+							{task.assignedUserName ?? "-"}
 						</p>
 					</div>
 
@@ -48,7 +49,7 @@ const Task = forwardRef<
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="w-4 h-4 fill-red-200 hover:fill-red-400"
+							className="w-4 h-4 fill-red-200 hover:fill-red-400 dark:fill-red-800 dark:hover:fill-red-600"
 						>
 							<path
 								strokeLinecap="round"
