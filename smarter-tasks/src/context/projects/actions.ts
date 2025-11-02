@@ -1,4 +1,5 @@
 import { API_ENDPOINT } from "../../config/constants";
+import type { Project } from "./reducer";
 export const fetchProjects = async (dispatch: any) => {
 	const token = localStorage.getItem("authToken") ?? "";
 
@@ -55,5 +56,59 @@ export const addProject = async (dispatch: any, args: any) => {
 		console.error("Operation failed:", error);
 		// Dialogue 5: And for error I'll return status called "ok", with value `false`.
 		return { ok: false, error };
+	}
+};
+
+export const getProjectDetails = async (args: any) => {
+	try {
+		const token = localStorage.getItem("authToken");
+		const { projectID } = args;
+		console.log(`Recieved ${projectID}`);
+		const response = await fetch(`${API_ENDPOINT}/projects/${projectID}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error("Failed to get project details");
+		}
+		const data = await response.json();
+		console.log(data);
+		return { ok: true, data };
+	} catch (error) {
+		console.error(`Error in fetching project detials`, error);
+	}
+};
+
+export const updateProject = async (
+	dispatch: any,
+	args: {
+		id: number;
+		data: Partial<Project>;
+	}
+) => {
+	const token = localStorage.getItem("authToken");
+	const { id, data } = args;
+	try {
+		const response = await fetch(`${API_ENDPOINT}/projects/${id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error("Failed to patch project");
+		}
+		const updated = await response.json();
+		console.log("updated: ", updated);
+		fetchProjects(dispatch);
+		return { ok: true };
+	} catch (error) {
+		console.error("Error patching project: ", error);
+		return { ok: false, error: error };
 	}
 };

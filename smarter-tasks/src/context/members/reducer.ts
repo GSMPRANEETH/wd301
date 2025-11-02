@@ -1,4 +1,4 @@
-interface Member {
+export interface Member {
 	id: number;
 	name: string;
 	email: string;
@@ -16,7 +16,10 @@ export type MemberActions =
 	| { type: "FETCH_MEMBERS_SUCCESS"; payload: Member[] }
 	| { type: "FETCH_MEMBERS_FAILURE"; payload: string }
 	| { type: "ADD_MEMBER_SUCCESS"; payload: Member }
-	| { type: "DELETE_MEMBER_SUCCESS"; payload: number };
+	| { type: "DELETE_MEMBER_SUCCESS"; payload: number }
+	| { type: "UPDATE_MEMBER_REQUEST" }
+	| { type: "UPDATE_MEMBER_FAILURE"; payload: string }
+	| { type: "UPDATE_MEMBER_SUCCESS" };
 
 export const initialState: MembersState = {
 	users: [],
@@ -54,6 +57,23 @@ export const reducer = (
 			return {
 				...state,
 				users: state.users.filter((user) => user.id != action.payload),
+			};
+		case "UPDATE_MEMBER_FAILURE":
+			return {
+				...state,
+				isError: true,
+				isLoading: false,
+				errorMessage: action.payload,
+			};
+		case "UPDATE_MEMBER_REQUEST":
+			return {
+				...state,
+				isLoading: true,
+			};
+		case "UPDATE_MEMBER_SUCCESS":
+			return {
+				...state,
+				isLoading: false,
 			};
 		default:
 			return state;

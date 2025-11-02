@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import MemberList from "./MemberList";
 import NewMember from "./NewMember";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import { Outlet } from "react-router-dom";
 
 const Members: React.FC = () => {
 	return (
@@ -15,6 +16,7 @@ const Members: React.FC = () => {
 					fallback={<div className="suspense-loading">Fetching Members...</div>}
 				>
 					<MemberList />
+					<Outlet />
 				</Suspense>
 			</ErrorBoundary>
 		</>

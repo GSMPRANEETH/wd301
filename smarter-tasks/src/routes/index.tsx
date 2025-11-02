@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import React from "react";
+import MemberDetails from "../pages/members/MemberDetails";
+import EditProject from "../pages/project_details/EditProject";
 
 const Signin = React.lazy(() => import("../pages/signin"));
 const Signup = React.lazy(() => import("../pages/signup"));
@@ -56,6 +58,7 @@ const router = createBrowserRouter([
 						element: <ProjectDetails />,
 						children: [
 							{ index: true, element: <></> },
+							{ path: "edit", element: <EditProject /> },
 							{
 								path: "tasks",
 								children: [
@@ -79,6 +82,13 @@ const router = createBrowserRouter([
 			{
 				path: "members",
 				element: <Members />,
+				children: [
+					{ index: true, element: <></> },
+					{
+						path: ":userID",
+						children: [{ index: true, element: <MemberDetails /> }],
+					},
+				],
 			},
 			{
 				path: "*",

@@ -1,4 +1,5 @@
 import { API_ENDPOINT } from "../../config/constants";
+import type { Member } from "./reducer";
 
 export const fetchMembers = async (dispatch: any) => {
 	const token = localStorage.getItem("authToken") ?? "";
@@ -72,6 +73,62 @@ export const deleteUser = async (dispatch: any, args: any) => {
 		return { ok: true };
 	} catch (error) {
 		console.error("Operation failed:", error);
+		return { ok: false, error };
+	}
+};
+
+export const getUserDetails = async (args: any) => {
+	const token = localStorage.getItem("authToken") ?? "";
+	const { id } = args;
+	console.log(`Got id in actions.ts: ${id}`);
+	try {
+		const response = await fetch(`${API_ENDPOINT}/users/${id}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error("Member details fetching failed");
+		}
+		const data = await response.json();
+		console.log("Reveived data: ", data);
+	} catch (error) {
+		console.log(`Error in fetching member detials of id: ${id}: `, error);
+	}
+};
+
+export const updateUserDetails = async (
+	dispatch: any,
+	args: {
+		id: number;
+		data: Partial<Member>;
+	}
+) => {
+	const token = localStorage.getItem("authToken") ?? "";
+	const { id, data } = args;
+	try {
+		dispatch({ type: "UPDATE_MEMBER_REQUEST" });
+		const response = await fetch(`${API_ENDPOINT}/users/${id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error("Member updating failed");
+		}
+		const updated = await response.json();
+		console.log("updated data:", updated);
+		dispatch({ type: "UPDATE_MEMBER_SUCCESS" });
+		fetchMembers(dispatch);
+		return { ok: true, user: updated as Member };
+	} catch (error) {
+		dispatch({ type: "UPDATE_MEMBER_FAILURE", payload: error });
+		console.log("Updating user details failed", error);
 		return { ok: false, error };
 	}
 };
