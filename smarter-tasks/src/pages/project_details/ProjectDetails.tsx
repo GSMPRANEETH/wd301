@@ -6,7 +6,6 @@ import { useTasksDispatch, useTasksState } from "../../context/task/context";
 import DragDropList from "./DragDropList";
 import { refreshTasks } from "../../context/task/actions";
 import { useProjectsState } from "../../context/projects/context";
-import { ThemeContext, ThemeProvider } from "../../context/theme";
 
 const ProjectDetails = () => {
 	const tasksState = useTasksState();
@@ -27,8 +26,6 @@ const ProjectDetails = () => {
 	if (tasksState.isLoading) {
 		return <>Loading...</>;
 	}
-
-	console.log(ThemeProvider);
 	return (
 		<>
 			<div className="flex justify-between">
