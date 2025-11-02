@@ -1,73 +1,86 @@
-# React + TypeScript + Vite
+# 📋 Smarter Tasks - Project Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A comprehensive, full-featured project management web application built with modern React ecosystem, enabling teams to efficiently organize projects, manage tasks, and collaborate seamlessly.
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.0-646cff?logo=vite)](https://vitejs.dev/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.0-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## React Compiler
+### Frontend Framework & Language
+- **React 18** with **TypeScript** for type-safe, component-based development
+- **Vite** for lightning-fast development and optimized production builds
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### State Management
+- **React Context API** with custom hooks for global state management
+- **useReducer** for complex state logic across Projects, Tasks, Members, and Comments
+- Custom dispatchers for organized action handling
 
-## Expanding the ESLint configuration
+### UI/UX
+- **TailwindCSS** for utility-first styling and responsive design
+- **Headless UI** for accessible, unstyled UI components (Dialog, Menu, Listbox, Switch, Transition)
+- **Heroicons** for consistent iconography
+- **Dark mode** support with theme context
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Form Handling
+- **React Hook Form** for performant, flexible form validation and management
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Routing
+- **React Router v6** for declarative, nested routing with protected routes
+- Lazy loading for optimized code splitting
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Drag & Drop
+- **@hello-pangea/dnd** (React Beautiful DnD) for intuitive task board interactions
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### PWA Features
+- **Vite PWA Plugin** for Progressive Web App capabilities
+- **Service Worker** with Workbox for offline functionality
+- Custom manifest with theme support
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Code Quality
+- **ESLint** with TypeScript support for code consistency
+- Strict TypeScript configuration for type safety
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Deployment
+- **Netlify** for seamless CI/CD and hosting
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🎯 Key Features
+
+### 📊 Project Management
+- ✅ Create, edit, and organize multiple projects
+- ✅ Real-time project status tracking
+- ✅ Project-specific task boards
+
+### 📝 Task Management
+- ✅ Kanban-style task boards with drag-and-drop functionality
+- ✅ Three-column workflow: **Pending** → **In Progress** → **Done**
+- ✅ Task assignments with member allocation
+- ✅ Due date tracking
+- ✅ Rich task descriptions and details
+- ✅ Task creation, editing, and deletion
+
+### 👥 Team Collaboration
+- ✅ Member management system
+- ✅ User authentication and authorization
+- ✅ Role-based access control
+- ✅ Comment system for task discussions
+- ✅ Member profile management
+
+### 💫 User Experience
+- ✅ Responsive design for all device sizes
+- ✅ Dark/Light theme toggle with persistence
+- ✅ Protected routes for authenticated users
+- ✅ Error boundaries for graceful error handling
+- ✅ Suspense-based lazy loading with loading states
+- ✅ Toast notifications for user feedback
+
+## 🏗️ Architecture Highlights
+
+### State Management Pattern
+```typescript
+// Centralized state with Context API
+- Reducer pattern for predictable state updates
+- Custom hooks (useProjectsState, useTasksDispatch, etc.)
+- Separation of concerns with dedicated action creators
