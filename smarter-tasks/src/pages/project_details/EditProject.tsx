@@ -42,6 +42,7 @@ const ExportProject: React.FC = () => {
 			id: Number(projectID),
 			data,
 		});
+		closeModal();
 	};
 	function closeModal() {
 		setIsOpen(false);

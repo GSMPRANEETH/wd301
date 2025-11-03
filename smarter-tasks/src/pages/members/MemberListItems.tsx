@@ -44,7 +44,10 @@ export default function MemberListItems() {
 						<button
 							className="deleteMemberButton cursor-pointer h-4 w-4 rounded-full my-5 mr-5"
 							type="button"
-							onClick={() => handleDelete({ id: user.id })}
+							onClick={(event) => {
+								event.preventDefault();
+								handleDelete({ id: user.id });
+							}}
 							value={user.id}
 						>
 							<svg
