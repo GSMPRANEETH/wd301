@@ -1,21 +1,10 @@
 import { Fragment, useState, useContext } from "react";
-import {
-	Disclosure,
-	Menu,
-	Switch,
-	Transition,
-	Listbox,
-} from "@headlessui/react";
+import { Disclosure, Menu, Switch, Transition } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/images/logo.png";
 import DarkLogo from "../../assets/images/darklogo.png";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../context/theme";
-
-const userNavigation = [
-	{ name: "Profile", href: "/profile" },
-	{ name: "Sign out", href: "/logout" },
-];
 
 const classNames = (...classes: string[]): string =>
 	classes.filter(Boolean).join(" ");
@@ -37,7 +26,6 @@ const Appbar = () => {
 	];
 
 	const mobileNavigation = [
-		{ name: "Profile", href: "/profile" },
 		{ name: "Projects", href: "/account/projects", current: false },
 		{ name: "Members", href: "/account/members", current: false },
 		{ name: "Sign out", href: "/logout" },
@@ -128,25 +116,21 @@ const Appbar = () => {
 										>
 											<Menu.Items className="absolute right-0 z-10 mt-2 w-fit md:w-48 origin-top-right rounded-md bg-white dark:bg-slate-700 py-0 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
 												<div className="hidden md:block py-1">
-													{userNavigation.map((item) => (
-														<Menu.Item key={item.name}>
-															{() => (
-																<a
-																	href={item.href}
-																	className={classNames(
-																		`${
-																			enabled
-																				? "bg-slate-500 text-white-700"
-																				: "text-gray-700"
-																		}`,
-																		"block px-4 py-2 text-sm"
-																	)}
-																>
-																	{item.name}
-																</a>
+													<Menu.Item key={"signout"}>
+														<a
+															href={"/logout"}
+															className={classNames(
+																`${
+																	enabled
+																		? "bg-slate-500 text-white-700"
+																		: "text-gray-700"
+																}`,
+																"block px-4 py-2 text-sm"
 															)}
-														</Menu.Item>
-													))}
+														>
+															Sign out
+														</a>
+													</Menu.Item>
 												</div>
 												<div className="md:hidden">
 													<div className="dark:bg-slate-500 flex items-center justify-between px-3 py-2">
