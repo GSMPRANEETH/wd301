@@ -7,7 +7,7 @@ const Projects: React.FC = () => {
 	return (
 		<>
 			<div className="flex justify-between">
-				<h2 className="text-2xl font-medium tracking-tight">Projects</h2>
+				<h2 className="text-2xl font-medium tracking-tight">Your Projects</h2>
 				<NewProject />
 			</div>
 			<ErrorBoundary>

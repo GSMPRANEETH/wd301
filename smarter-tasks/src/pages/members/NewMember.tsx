@@ -43,9 +43,22 @@ const NewMember = () => {
 			<button
 				type="button"
 				onClick={openModal}
-				className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+				// className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
 			>
-				New Member
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					className="size-10"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+					/>
+				</svg>
 			</button>
 			<Transition appear show={isOpen} as={Fragment}>
 				<Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -71,23 +84,27 @@ const NewMember = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900"
+										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
 									>
 										Create new Member
 									</Dialog.Title>
 									<div className="mt-2">
 										<form onSubmit={handleSubmit(onSubmit)}>
 											{/* I'll show the error, if it exists.*/}
-											{error && <span>{error}</span>}
+											{error && (
+												<span className="text-red-600 dark:text-red-400 mb-2 block">
+													{error}
+												</span>
+											)}
 											<input
 												type="text"
 												placeholder="Enter Member name..."
 												autoFocus
 												{...register("name", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.name
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -103,7 +120,7 @@ const NewMember = () => {
 												placeholder="Enter member email..."
 												autoFocus
 												{...register("email", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.email
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -119,7 +136,7 @@ const NewMember = () => {
 												placeholder="Enter password"
 												autoFocus
 												{...register("password", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.password
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -134,7 +151,7 @@ const NewMember = () => {
 												type="submit"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 											>
-												Submit
+												Create
 											</button>
 											<button
 												type="button"

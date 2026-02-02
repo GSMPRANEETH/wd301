@@ -26,18 +26,20 @@ const Task = forwardRef<
 					<div>
 						<h2 className="text-base font-bold my-1">{task.title}</h2>
 						<p className="text-sm">{new Date(task.dueDate).toDateString()}</p>
-						<p className="text-sm">
-							<span className="font-semibold">Description:</span>{" "}
-							{task.description}
-						</p>
-						<p className="text-sm">
-							<span className="font-semibold">Assignee:</span>
-							{task.assignedUserName ?? "-"}
-						</p>
+						<div className="hidden md:block">
+							<p className="text-sm">
+								<span className="font-semibold">Description:</span>{" "}
+								{task.description}
+							</p>
+							<p className="text-sm">
+								<span className="font-semibold">Assignee:</span>
+								{task.assignedUserName ?? " -"}
+							</p>
+						</div>
 					</div>
 
 					<button
-						className="deleteTaskButton cursor-pointer h-4 w-4 rounded-full my-5 mr-5"
+						className="deleteTaskButton cursor-pointer size-4 rounded-full my-5 mr-5"
 						onClick={(event) => {
 							event.preventDefault();
 							deleteTask(taskDispatch, projectID ?? "", task);

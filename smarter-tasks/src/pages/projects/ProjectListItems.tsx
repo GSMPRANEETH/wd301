@@ -14,9 +14,9 @@ export default function ProjectListItems() {
 				<Link
 					key={project.id}
 					to={`${project.id}`}
-					className="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+					className="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 overflow-hidden"
 				>
-					<h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
+					<h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white break-words">
 						{project.name}
 					</h5>
 				</Link>

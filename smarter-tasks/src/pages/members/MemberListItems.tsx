@@ -27,8 +27,8 @@ export default function MemberListItems() {
 		<>
 			{users.map((user: any) => (
 				<Link
-					className="TaskItem w-full shadow-md border border-slate bg-white
-             dark:bg-inherit dark:border-white "
+					className="TaskItem w-full shadow-md bg-white
+             dark:bg-inherit "
 					to={`${user.id}`}
 				>
 					<div
@@ -42,7 +42,7 @@ export default function MemberListItems() {
 							{user.email}
 						</h5>
 						<button
-							className="deleteMemberButton cursor-pointer h-4 w-4 rounded-full my-5 mr-5"
+							className="deleteMemberButton cursor-pointer size-4 rounded-full my-5 mr-5"
 							type="button"
 							onClick={(event) => {
 								event.preventDefault();

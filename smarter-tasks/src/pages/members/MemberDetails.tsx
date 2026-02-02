@@ -85,16 +85,16 @@ const MemberDetails: React.FC = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900"
+										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
 									>
 										Member Details
 									</Dialog.Title>
 									<div className="mt-2">
 										<form onSubmit={handleSubmit(onSubmit)}>
-											<h3>
+											<h3 className="dark:text-white">
 												<strong>Name</strong>
 											</h3>
 											<input
@@ -102,7 +102,7 @@ const MemberDetails: React.FC = () => {
 												placeholder="Enter name"
 												id="name"
 												{...register("name", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.email
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -113,7 +113,7 @@ const MemberDetails: React.FC = () => {
 													This field is required
 												</span>
 											)}
-											<h3>
+											<h3 className="dark:text-white">
 												<strong>Email</strong>
 											</h3>
 											<input
@@ -121,7 +121,7 @@ const MemberDetails: React.FC = () => {
 												placeholder="Enter user mail ID"
 												id="email"
 												{...register("email", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.email
 														? "border-red-500 focus:border-red-500"
 														: ""

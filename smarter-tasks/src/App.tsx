@@ -10,7 +10,7 @@ const App = () => {
 	const { theme } = useContext(ThemeContext);
 	return (
 		<div
-			className={`h-screen w-full mx-auto py-2 ${
+			className={`min-h-screen w-full mx-auto py-2 ${
 				theme === "dark" ? "dark" : ""
 			}`}
 		>

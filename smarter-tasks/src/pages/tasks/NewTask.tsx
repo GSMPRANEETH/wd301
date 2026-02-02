@@ -70,10 +70,10 @@ const NewTask = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900"
+										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
 									>
 										Create new Task
 									</Dialog.Title>
@@ -86,7 +86,7 @@ const NewTask = () => {
 												id="title"
 												// Register the title field
 												{...register("title", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.title
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -104,7 +104,7 @@ const NewTask = () => {
 												id="description"
 												// register the description field
 												{...register("description")}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.description
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -123,7 +123,7 @@ const NewTask = () => {
 												// register due date field
 												{...register("dueDate", { required: true })}
 												defaultValue={today}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
 													errors.dueDate
 														? "border-red-500 focus:border-red-500"
 														: ""
@@ -140,7 +140,7 @@ const NewTask = () => {
 												id="newTaskSubmitBtn"
 												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 											>
-												Submit
+												Create
 											</button>
 											<button
 												onClick={closeModal}

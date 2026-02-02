@@ -17,6 +17,12 @@ const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 	useEffect(() => {
 		localStorage.setItem("theme", theme);
+		// Apply dark class to document root so it works with HeadlessUI Portals
+		if (theme === "dark") {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
 	}, [theme]);
 
 	const valueToShare = {
