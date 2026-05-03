@@ -85,66 +85,68 @@ const MemberDetails: React.FC = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-surface border border-base p-6 text-left align-middle shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+										className="text-2xl font-bold text-display tracking-tight"
 									>
 										Member Details
 									</Dialog.Title>
-									<div className="mt-2">
+									<div className="mt-4">
 										<form onSubmit={handleSubmit(onSubmit)}>
-											<h3 className="dark:text-white">
-												<strong>Name</strong>
-											</h3>
-											<input
-												type="text"
-												placeholder="Enter name"
-												id="name"
-												{...register("name", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.email
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.name && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<h3 className="dark:text-white">
-												<strong>Email</strong>
-											</h3>
-											<input
-												type="email"
-												placeholder="Enter user mail ID"
-												id="email"
-												{...register("email", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.email
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.email && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<button
-												type="submit"
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Update
-											</button>
-											<button
-												type="button"
-												onClick={closeModal}
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Cancel
-											</button>
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter name"
+                                                        id="name"
+                                                        {...register("name", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.name
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.name && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="email"
+                                                        placeholder="Enter user mail ID"
+                                                        id="email"
+                                                        {...register("email", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.email
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.email && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-3 justify-end mt-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={closeModal}
+                                                    className="px-5 py-2.5 bg-surface border border-base text-fg rounded-xl text-sm font-bold hover:bg-bg transition-all active:scale-[0.98]"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]"
+                                                >
+                                                    Update
+                                                </button>
+                                            </div>
 										</form>
 									</div>
 								</Dialog.Panel>

@@ -36,7 +36,7 @@ const Task = forwardRef<
                 </div>
 
                 <button
-                    className="deleteTaskButton absolute top-4 right-4 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="deleteTaskButton absolute top-4 right-4 text-muted hover:text-red-500 transition-opacity"
                     onClick={(event) => {
                         event.preventDefault();
                         deleteTask(taskDispatch, projectID ?? "", task);
