@@ -58,7 +58,7 @@ const Appbar = () => {
 							</div>
 						</div>
 						<div className="flex items-center gap-4">
-                            <button onClick={toggleTheme} className="p-2 hover:bg-surface border border-base rounded-lg text-muted transition-colors">
+                            <button onClick={toggleTheme} className="p-2 hover:bg-surface border border-base rounded-lg text-muted transition-colors" aria-label={enabled ? 'Switch to light mode' : 'Switch to dark mode'} aria-pressed={enabled} title={enabled ? 'Switch to light mode' : 'Switch to dark mode'}>
                                 {enabled ? '🌙' : '🌞'}
                             </button>
 							<div className="hidden md:block">

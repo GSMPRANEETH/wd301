@@ -43,7 +43,7 @@ const SigninForm: React.FC = () => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<div className="space-y-2">
-				<label className="text-[10px] font-bold uppercase tracking-widest text-muted">Email</label>
+				<label htmlFor="email" className="text-[10px] font-bold uppercase tracking-widest text-muted">Email</label>
 				<input
 					type="email"
 					id="email"
@@ -60,7 +60,7 @@ const SigninForm: React.FC = () => {
 				)}
 			</div>
 			<div className="space-y-2">
-				<label className="text-[10px] font-bold uppercase tracking-widest text-muted">
+				<label htmlFor="password" className="text-[10px] font-bold uppercase tracking-widest text-muted">
 					Password
 				</label>
 				<input

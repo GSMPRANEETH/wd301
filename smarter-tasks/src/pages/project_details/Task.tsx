@@ -19,9 +19,9 @@ const Task = forwardRef<
     const dateFormatted = new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
 	return (
-		<div ref={ref} {...props} className="cursor-grab active:cursor-grabbing block">
+		<div ref={ref} {...props} className="cursor-grab active:cursor-grabbing block relative group">
 			<Link
-				className="task-card p-5 rounded-2xl block relative group"
+				className="task-card p-5 rounded-2xl block"
 				to={`tasks/${task.id}`}
 			>
 				<h4 className="text-sm font-bold mb-4 leading-relaxed pr-8">{task.title}</h4>
@@ -34,30 +34,30 @@ const Task = forwardRef<
                         {assigneeInitial}
                     </div>
                 </div>
-
-                <button
-                    className="deleteTaskButton absolute top-4 right-4 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(event) => {
-                        event.preventDefault();
-                        deleteTask(taskDispatch, projectID ?? "", task);
-                    }}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </button>
 			</Link>
+            <button
+                className="deleteTaskButton absolute top-4 right-4 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(event) => {
+                    event.preventDefault();
+                    deleteTask(taskDispatch, projectID ?? "", task);
+                }}
+                aria-label="Delete task"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                    />
+                </svg>
+            </button>
 		</div>
 	);
 });

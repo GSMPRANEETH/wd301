@@ -44,6 +44,8 @@ export default function MemberListItems() {
                                 event.preventDefault();
                                 handleDelete({ id: user.id });
                             }}
+                            aria-label={`Delete member ${user.name || user.id}`}
+                            title={`Delete member ${user.name || user.id}`}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

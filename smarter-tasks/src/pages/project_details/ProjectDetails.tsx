@@ -57,13 +57,8 @@ const ProjectDetails = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-5">
-                    <Link to={`tasks/new`}>
-                        <button
-                            id="newTaskBtn"
-                            className="px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]"
-                        >
-                            Add Task
-                        </button>
+                    <Link to={`tasks/new`} id="newTaskBtn" className="px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]">
+                        Add Task
                     </Link>
                 </div>
             </div>
