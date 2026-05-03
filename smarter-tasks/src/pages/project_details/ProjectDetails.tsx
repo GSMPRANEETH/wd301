@@ -53,7 +53,6 @@ const ProjectDetails = () => {
                                 </svg>
                             </Link>
                         </h2>
-                        <p className="text-muted text-sm font-medium">Sprint Active</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-5">

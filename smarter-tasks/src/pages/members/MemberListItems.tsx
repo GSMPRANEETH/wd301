@@ -26,17 +26,12 @@ export default function MemberListItems() {
 	return (
 		<>
 			{users.map((user: any) => (
-                <tr key={user.id} className="hover:bg-bg/40 transition-colors group">
-                    <td className="px-8 py-5 font-bold">
-                        <Link to={`${user.id}`} className="hover:text-accent transition-colors block">
-                            {user.name}
-                        </Link>
-                    </td>
-                    <td className="px-8 py-5 text-muted font-medium">{user.email}</td>
-                    <td className="px-8 py-5">
-                        <span className="px-2.5 py-1 rounded-full bg-border text-[9px] font-black uppercase tracking-wider border border-base">Member</span>
-                    </td>
-                    <td className="px-8 py-5 text-right">
+                <Link
+                    key={user.id}
+                    to={`${user.id}`}
+                    className="task-card p-6 rounded-2xl cursor-pointer group relative overflow-hidden block flex items-center justify-center min-h-[100px]"
+                >
+                    <div className="absolute top-4 right-4 z-10">
                         <button
                             className="deleteMemberButton text-muted hover:text-red-500 transition-colors"
                             type="button"
@@ -60,8 +55,14 @@ export default function MemberListItems() {
                                 />
                             </svg>
                         </button>
-                    </td>
-                </tr>
+                    </div>
+                    <div className="text-center w-full">
+                        <h3 className="text-xl font-bold group-hover:text-accent transition-colors leading-tight break-words">
+                            {user.name}
+                        </h3>
+                        <p className="text-sm text-muted font-medium mt-2">{user.email}</p>
+                    </div>
+                </Link>
 			))}
 		</>
 	);
