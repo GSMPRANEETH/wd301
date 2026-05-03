@@ -30,13 +30,13 @@ const ProjectDetails = () => {
 		<div className="space-y-8 p-6 max-w-7xl mx-auto w-full view-enter">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/account/projects" className="p-2.5 hover:bg-surface border border-base rounded-xl text-muted transition-all active:scale-[0.95]">
+                    <Link to="/account/projects" aria-label="Back to projects" className="p-2.5 hover:bg-surface border border-base rounded-xl text-muted transition-all active:scale-[0.95]">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
                     </Link>
                     <div>
                         <h2 className="text-3xl font-bold text-display tracking-tight leading-tight flex items-center gap-2">
                             {selectedProject.name}
-                            <Link to={"edit"} className="text-muted hover:text-fg ml-2">
+                            <Link to={"edit"} aria-label={`Edit ${selectedProject.name}`} className="text-muted hover:text-fg ml-2">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
