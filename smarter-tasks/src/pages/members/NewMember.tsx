@@ -43,25 +43,13 @@ const NewMember = () => {
 			<button
 				type="button"
 				onClick={openModal}
-				// className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+				className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					className="size-10"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-					/>
-				</svg>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+				New Member
 			</button>
 			<Transition appear show={isOpen} as={Fragment}>
-				<Dialog as="div" className="relative z-10" onClose={closeModal}>
+				<Dialog as="div" className="relative z-50" onClose={closeModal}>
 					<Transition.Child
 						as={Fragment}
 						enter="ease-out duration-300"
@@ -71,7 +59,7 @@ const NewMember = () => {
 						leaveFrom="opacity-100"
 						leaveTo="opacity-0"
 					>
-						<div className="fixed inset-0 bg-black bg-opacity-25" />
+						<div className="fixed inset-0 modal-overlay" />
 					</Transition.Child>
 					<div className="fixed inset-0 overflow-y-auto">
 						<div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -84,82 +72,90 @@ const NewMember = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-surface border border-base p-6 text-left align-middle shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+										className="text-2xl font-bold text-display tracking-tight"
 									>
 										Create new Member
 									</Dialog.Title>
-									<div className="mt-2">
+									<div className="mt-4">
 										<form onSubmit={handleSubmit(onSubmit)}>
-											{/* I'll show the error, if it exists.*/}
-											{error && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													{error}
-												</span>
-											)}
-											<input
-												type="text"
-												placeholder="Enter Member name..."
-												autoFocus
-												{...register("name", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.name
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.name && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<input
-												type="email"
-												placeholder="Enter member email..."
-												autoFocus
-												{...register("email", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.email
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.email && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<input
-												type="password"
-												placeholder="Enter password"
-												autoFocus
-												{...register("password", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.password
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.password && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<button
-												type="submit"
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Create
-											</button>
-											<button
-												type="button"
-												onClick={closeModal}
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Cancel
-											</button>
+                                            <div className="space-y-4">
+                                                {/* I'll show the error, if it exists.*/}
+                                                {error && (
+                                                    <span className="text-red-500 mb-2 block text-xs">
+                                                        {error}
+                                                    </span>
+                                                )}
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter Member name..."
+                                                        autoFocus
+                                                        {...register("name", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.name
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.name && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="email"
+                                                        placeholder="Enter member email..."
+                                                        {...register("email", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.email
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.email && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="password"
+                                                        placeholder="Enter password"
+                                                        {...register("password", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.password
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.password && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-3 justify-end mt-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={closeModal}
+                                                    className="px-5 py-2.5 bg-surface border border-base text-fg rounded-xl text-sm font-bold hover:bg-bg transition-all active:scale-[0.98]"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]"
+                                                >
+                                                    Create
+                                                </button>
+                                            </div>
 										</form>
 									</div>
 								</Dialog.Panel>

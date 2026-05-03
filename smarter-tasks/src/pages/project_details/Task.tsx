@@ -1,7 +1,6 @@
 import React, { forwardRef } from "react";
 
 import type { TaskDetails } from "../../context/task/types";
-import "./TaskCard.css";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useTasksDispatch } from "../../context/task/context";
@@ -15,52 +14,49 @@ const Task = forwardRef<
 	const taskDispatch = useTasksDispatch();
 	const { projectID } = useParams();
 	const { task } = props;
+
+    const assigneeInitial = task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : "-";
+    const dateFormatted = new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
 	return (
-		<div ref={ref} {...props} className="m-2 flex">
+		<div ref={ref} {...props} className="cursor-grab active:cursor-grabbing block">
 			<Link
-				className="TaskItem w-full shadow-md border border-slate bg-white
-             dark:bg-inherit dark:border-white "
+				className="task-card p-5 rounded-2xl block relative group"
 				to={`tasks/${task.id}`}
 			>
-				<div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-					<div>
-						<h2 className="text-base font-bold my-1">{task.title}</h2>
-						<p className="text-sm">{new Date(task.dueDate).toDateString()}</p>
-						<div className="hidden md:block">
-							<p className="text-sm">
-								<span className="font-semibold">Description:</span>{" "}
-								{task.description}
-							</p>
-							<p className="text-sm">
-								<span className="font-semibold">Assignee:</span>
-								{task.assignedUserName ?? " -"}
-							</p>
-						</div>
-					</div>
+				<h4 className="text-sm font-bold mb-4 leading-relaxed pr-8">{task.title}</h4>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-[10px] text-muted font-bold uppercase tracking-wider">
+                        <svg className="w-3.5 h-3.5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        {dateFormatted}
+                    </div>
+                    <div className="h-7 w-7 rounded-full bg-accent flex items-center justify-center text-[10px] font-black text-white shadow-md shadow-accent/20">
+                        {assigneeInitial}
+                    </div>
+                </div>
 
-					<button
-						className="deleteTaskButton cursor-pointer size-4 rounded-full my-5 mr-5"
-						onClick={(event) => {
-							event.preventDefault();
-							deleteTask(taskDispatch, projectID ?? "", task);
-						}}
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth="1.5"
-							stroke="currentColor"
-							className="w-4 h-4 fill-red-200 hover:fill-red-400 dark:fill-red-800 dark:hover:fill-red-600"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-							/>
-						</svg>
-					</button>
-				</div>
+                <button
+                    className="deleteTaskButton absolute top-4 right-4 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(event) => {
+                        event.preventDefault();
+                        deleteTask(taskDispatch, projectID ?? "", task);
+                    }}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
 			</Link>
 		</div>
 	);

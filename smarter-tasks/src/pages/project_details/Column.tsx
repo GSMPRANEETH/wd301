@@ -5,24 +5,28 @@ import Task from "./Task";
 import { Droppable } from "@hello-pangea/dnd";
 
 const Container = (props: React.PropsWithChildren) => {
-	// We will use flex to display lists as columns
 	return (
-		<div className="m-2 border border-gray rounded w-1/3 flex flex-col">
+		<div className="flex-shrink-0 w-80 kanban-column rounded-2xl p-4 flex flex-col gap-5">
 			{props.children}
 		</div>
 	);
 };
 
-// A component to render the title, which will be included as <Title>This is a sample title</Title>
-const Title = (props: React.PropsWithChildren) => {
-	return <h3 className="p-2 font-semibold">{props.children}</h3>;
+const Title = (props: { title: string, count: number }) => {
+	return (
+        <div className="flex items-center justify-between px-2">
+            <h3 className="text-xs font-black uppercase tracking-widest text-muted flex items-center gap-2.5">
+                {props.title}
+                <span className="bg-white/10 px-2 py-0.5 rounded-full text-[10px] border border-base font-bold text-fg">{props.count}</span>
+            </h3>
+        </div>
+    );
 };
 
 const TaskList = forwardRef<HTMLDivElement | null, React.PropsWithChildren>(
 	(props: React.PropsWithChildren, ref) => {
 		return (
-			<div ref={ref} className="grow min-h-100 dropArea" {...props}>
-				{" "}
+			<div ref={ref} className="flex-1 space-y-4" {...props}>
 				{props.children}
 			</div>
 		);
@@ -37,7 +41,7 @@ interface Props {
 const Column: React.FC<Props> = (props) => {
 	return (
 		<Container>
-			<Title>{props.column.title}</Title>
+			<Title title={props.column.title} count={props.tasks.length} />
 			<Droppable droppableId={props.column.id}>
 				{(provided) => (
 					<TaskList ref={provided.innerRef} {...provided.droppableProps}>

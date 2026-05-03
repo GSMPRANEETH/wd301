@@ -27,7 +27,7 @@ const NewTask = () => {
 		(project) => `${project.id}` === projectID
 	)?.[0];
 	if (!selectedProject) {
-		return <>No such Project!</>;
+		return <div className="text-muted p-6">No such Project!</div>;
 	}
 	function closeModal() {
 		setIsOpen(false);
@@ -47,7 +47,7 @@ const NewTask = () => {
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
-				<Dialog as="div" className="relative z-10" onClose={closeModal}>
+				<Dialog as="div" className="relative z-50" onClose={closeModal}>
 					<Transition.Child
 						as={Fragment}
 						enter="ease-out duration-300"
@@ -57,7 +57,7 @@ const NewTask = () => {
 						leaveFrom="opacity-100"
 						leaveTo="opacity-0"
 					>
-						<div className="fixed inset-0 bg-black bg-opacity-25" />
+						<div className="fixed inset-0 modal-overlay" />
 					</Transition.Child>
 					<div className="fixed inset-0 overflow-y-auto">
 						<div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -70,84 +70,93 @@ const NewTask = () => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-surface border border-base p-6 text-left align-middle shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] transition-all">
 									<Dialog.Title
 										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+										className="text-2xl font-bold text-display tracking-tight"
 									>
 										Create new Task
 									</Dialog.Title>
-									<div className="mt-2">
+									<div className="mt-4">
 										<form onSubmit={handleSubmit(onSubmit)}>
-											<input
-												type="text"
-												placeholder="Enter title"
-												autoFocus
-												id="title"
-												// Register the title field
-												{...register("title", { required: true })}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.title
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.title && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<input
-												type="text"
-												placeholder="Enter description"
-												autoFocus
-												id="description"
-												// register the description field
-												{...register("description")}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.description
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.description && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													Invalid description
-												</span>
-											)}
-											<input
-												type="date"
-												placeholder="Enter due date"
-												autoFocus
-												id="dueDate"
-												// register due date field
-												{...register("dueDate", { required: true })}
-												defaultValue={today}
-												className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
-													errors.dueDate
-														? "border-red-500 focus:border-red-500"
-														: ""
-												}`}
-											/>
-											{errors.dueDate && (
-												<span className="text-red-600 dark:text-red-400 mb-2 block">
-													This field is required
-												</span>
-											)}
-											<button
-												type="submit"
-												// Set an id for the submit button
-												id="newTaskSubmitBtn"
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 mr-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Create
-											</button>
-											<button
-												onClick={closeModal}
-												className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-											>
-												Cancel
-											</button>
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter title"
+                                                        autoFocus
+                                                        id="title"
+                                                        // Register the title field
+                                                        {...register("title", { required: true })}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.title
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.title && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter description"
+                                                        id="description"
+                                                        // register the description field
+                                                        {...register("description")}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.description
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.description && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            Invalid description
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="date"
+                                                        placeholder="Enter due date"
+                                                        id="dueDate"
+                                                        // register due date field
+                                                        {...register("dueDate", { required: true })}
+                                                        defaultValue={today}
+                                                        className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
+                                                            errors.dueDate
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                    {errors.dueDate && (
+                                                        <span className="text-red-500 mt-2 block text-xs">
+                                                            This field is required
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex gap-3 justify-end mt-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={closeModal}
+                                                    className="px-5 py-2.5 bg-surface border border-base text-fg rounded-xl text-sm font-bold hover:bg-bg transition-all active:scale-[0.98]"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    id="newTaskSubmitBtn"
+                                                    className="px-5 py-2.5 bg-accent text-white rounded-xl text-sm font-bold shadow-lg shadow-accent/20 hover:opacity-90 transition-all active:scale-[0.98]"
+                                                >
+                                                    Create
+                                                </button>
+                                            </div>
 										</form>
 									</div>
 								</Dialog.Panel>

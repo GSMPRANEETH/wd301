@@ -10,10 +10,10 @@ export default function MemberListItems() {
 	let state: any = useMembersState();
 	const { users, isLoading, isError, errorMessage } = state;
 	if (users.length === 0 && isLoading) {
-		return <span>Loading...</span>;
+		return <tr><td colSpan={4} className="px-8 py-5 text-muted">Loading...</td></tr>;
 	}
 	if (isError) {
-		return <span>{errorMessage}</span>;
+		return <tr><td colSpan={4} className="px-8 py-5 text-red-500">{errorMessage}</td></tr>;
 	}
 
 	const handleDelete = async (data: { id: any }) => {
@@ -26,47 +26,42 @@ export default function MemberListItems() {
 	return (
 		<>
 			{users.map((user: any) => (
-				<Link
-					className="TaskItem w-full shadow-md bg-white
-             dark:bg-inherit "
-					to={`${user.id}`}
-				>
-					<div
-						key={user.id}
-						className="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-					>
-						<h5 className="mb-2 text-xl font-medium tracking-tight text-gray-900 dark:text-white">
-							{user.name}
-						</h5>
-						<h5 className="mb-2 text-m font-medium tracking-tight text-gray-600 dark:text-white">
-							{user.email}
-						</h5>
-						<button
-							className="deleteMemberButton cursor-pointer size-4 rounded-full my-5 mr-5"
-							type="button"
-							onClick={(event) => {
-								event.preventDefault();
-								handleDelete({ id: user.id });
-							}}
-							value={user.id}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								strokeWidth="1.5"
-								stroke="currentColor"
-								className="w-4 h-4 fill-red-200 hover:fill-red-400 dark:fill-red-800 dark:hover:fill-red-600"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-								/>
-							</svg>
-						</button>
-					</div>
-				</Link>
+                <tr key={user.id} className="hover:bg-bg/40 transition-colors group">
+                    <td className="px-8 py-5 font-bold">
+                        <Link to={`${user.id}`} className="hover:text-accent transition-colors block">
+                            {user.name}
+                        </Link>
+                    </td>
+                    <td className="px-8 py-5 text-muted font-medium">{user.email}</td>
+                    <td className="px-8 py-5">
+                        <span className="px-2.5 py-1 rounded-full bg-border text-[9px] font-black uppercase tracking-wider border border-base">Member</span>
+                    </td>
+                    <td className="px-8 py-5 text-right">
+                        <button
+                            className="deleteMemberButton text-muted hover:text-red-500 transition-colors"
+                            type="button"
+                            onClick={(event) => {
+                                event.preventDefault();
+                                handleDelete({ id: user.id });
+                            }}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                stroke="currentColor"
+                                className="w-5 h-5"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
 			))}
 		</>
 	);

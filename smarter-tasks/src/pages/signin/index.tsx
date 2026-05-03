@@ -5,12 +5,15 @@ import SigninForm from "./SigninForm";
 const Signin: React.FC = () => {
 	// And use it after the h1 tag
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-100">
-			<div className="max-w-md w-full px-6 py-8 bg-white rounded-lg shadow-md">
-				<h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-					Sign in
-				</h1>
-				<SigninForm />
+		<div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-bg to-surface">
+			<div className="w-full max-w-sm space-y-8 view-enter">
+				<div className="text-center space-y-2">
+					<h2 className="text-4xl font-bold text-display tracking-tight">Welcome back</h2>
+					<p className="text-muted text-sm">Sign in to Smarter Tasks to continue</p>
+				</div>
+				<div className="bg-surface border border-base rounded-2xl p-8 space-y-6 shadow-xl shadow-black/5">
+					<SigninForm />
+				</div>
 			</div>
 		</div>
 	);
