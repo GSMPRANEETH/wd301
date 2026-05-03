@@ -2,6 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-.dark {
-	@apply bg-slate-800 text-zinc-50;
+@layer base {
+  :root {
+    --bg: 99% 0.002 240;
+    --surface: 100% 0 0;
+    --fg: 18% 0.012 250;
+    --muted: 54% 0.012 250;
+    --border: 92% 0.005 250;
+    --accent: 58% 0.18 255;
+    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  }
+
+  .dark {
+    --bg: 12% 0.01 250;
+    --surface: 15% 0.012 250;
+    --fg: 98% 0.005 250;
+    --muted: 60% 0.01 250;
+    --border: 22% 0.015 250;
+    --accent: 65% 0.2 255;
+  }
+
+  body {
+    background-color: oklch(var(--bg));
+    color: oklch(var(--fg));
+    font-family: var(--font-body);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .text-display { font-family: var(--font-display); }
+  .border-base { border-color: oklch(var(--border)); }
+
+  .glass-nav {
+    background: color-mix(in oklch, oklch(var(--bg)), transparent 20%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid oklch(var(--border));
+  }
+
+  .kanban-column {
+    background: color-mix(in oklch, oklch(var(--bg)), oklch(var(--fg)) 2%);
+    border: 1px solid oklch(var(--border));
+    min-height: calc(100vh - 200px);
+  }
+
+  .view-enter {
+    animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .task-card {
+    background: oklch(var(--surface));
+    border: 1px solid oklch(var(--border));
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .task-card:hover {
+    border-color: oklch(var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .modal-overlay {
+    background: color-mix(in oklch, oklch(var(--bg)), transparent 40%);
+    backdrop-filter: blur(8px);
+  }
+
+  .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+  .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+  .custom-scroll::-webkit-scrollbar-thumb { background: oklch(var(--border)); border-radius: 10px; }
 }

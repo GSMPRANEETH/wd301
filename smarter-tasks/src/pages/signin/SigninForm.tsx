@@ -41,50 +41,52 @@ const SigninForm: React.FC = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<div>
-				<label className="block text-gray-700 font-semibold mb-2">Email:</label>
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+			<div className="space-y-2">
+				<label className="text-[10px] font-bold uppercase tracking-widest text-muted">Email</label>
 				<input
 					type="email"
 					id="email"
+					placeholder="name@company.com"
 					{...register("email", { required: true })}
-					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+					className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
 						errors.email ? "border-red-500 focus:border-red-500" : ""
 					}`}
 				/>
 				{errors.email && (
-					<span className="text-red-600 dark:text-red-400 mb-2 block">
+					<span className="text-red-500 mb-2 block text-xs">
 						Invalid Email
 					</span>
 				)}
 			</div>
-			<div>
-				<label className="block text-gray-700 font-semibold mb-2">
-					Password:
+			<div className="space-y-2">
+				<label className="text-[10px] font-bold uppercase tracking-widest text-muted">
+					Password
 				</label>
 				<input
 					type="password"
 					id="password"
+					placeholder="••••••••"
 					{...register("password", { required: true })}
-					className={`w-full border rounded-md py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none focus:border-blue-500 focus:shadow-outline-blue ${
+					className={`w-full px-4 py-2.5 bg-bg border border-base rounded-xl focus:outline-none focus:border-accent text-sm transition-colors ${
 						errors.password ? "border-red-500 focus:border-red-500" : ""
 					}`}
 				/>
 				{errors.password && (
-					<span className="text-red-600 dark:text-red-400 mb-2 block">
+					<span className="text-red-500 mb-2 block text-xs">
 						Invalid Password
 					</span>
 				)}
 			</div>
 			<button
 				type="submit"
-				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
+				className="w-full py-3 bg-accent text-white rounded-xl font-bold hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-accent/20 mt-4"
 			>
 				Sign In
 			</button>
 			<button
 				type="button"
-				className="w-full bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-gray mt-4"
+				className="w-full py-3 bg-surface border border-base text-fg rounded-xl font-bold hover:bg-bg transition-all active:scale-[0.98] mt-4"
 				onClick={() => {
 					navigate("/signup");
 				}}

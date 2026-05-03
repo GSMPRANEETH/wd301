@@ -6,22 +6,23 @@ import { Outlet } from "react-router-dom";
 
 const Members: React.FC = () => {
 	return (
-		<>
-			<div className="flex justify-between">
-				<h2 className="text-2xl font-medium tracking-tight">
-					Members across your projects
-				</h2>
+		<div className="space-y-8 p-6 max-w-7xl mx-auto w-full view-enter">
+			<div className="flex items-center justify-between">
+                <div>
+				    <h2 className="text-3xl font-bold text-display tracking-tight">Team Members</h2>
+                    <p className="text-muted text-sm">Manage access and roles for your workspace</p>
+                </div>
 				<NewMember />
 			</div>
 			<ErrorBoundary>
 				<Suspense
-					fallback={<div className="suspense-loading">Fetching Members...</div>}
+					fallback={<div className="suspense-loading text-muted">Fetching Members...</div>}
 				>
 					<MemberList />
 					<Outlet />
 				</Suspense>
 			</ErrorBoundary>
-		</>
+		</div>
 	);
 };
 
