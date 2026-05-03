@@ -86,6 +86,9 @@ const ExportProject: React.FC = () => {
 										<form onSubmit={handleSubmit(onSubmit)}>
                                             <div className="space-y-4">
                                                 <div>
+                                                    <label htmlFor="name" className="absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0">
+                                                        Project name
+                                                    </label>
                                                     <input
                                                         type="text"
                                                         placeholder="Enter name"
