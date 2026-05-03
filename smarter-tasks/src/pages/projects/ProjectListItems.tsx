@@ -20,9 +20,9 @@ export default function ProjectListItems() {
                         <div className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border bg-green-500/10 text-green-500 border-green-500/20">
                             Active
                         </div>
-                        <span className="p-1 text-muted group-hover:text-fg transition-colors" aria-hidden="true">
+                        <button className="p-1 text-muted group-hover:text-fg transition-colors">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
-                        </span>
+                        </button>
                     </div>
 					<h3 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors leading-tight break-words">
 						{project.name}
