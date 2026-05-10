@@ -36,6 +36,7 @@ const ExportProject: React.FC = () => {
 			await getProjectDetails(projectDispatch, { projectID });
 		}
 		fetchProjectDetails();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [projectID]);
 	const onSubmit: SubmitHandler<Project> = async (data) => {
 		await updateProject(projectDispatch, {

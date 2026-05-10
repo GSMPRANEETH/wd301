@@ -11,7 +11,7 @@
     "prepare": "cd .. && husky smarter-tasks/.husky"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
     ]
   },

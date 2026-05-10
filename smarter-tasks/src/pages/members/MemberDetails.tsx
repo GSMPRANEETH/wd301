@@ -21,6 +21,7 @@ const MemberDetails: React.FC = () => {
 	// fetch once when userID is available
 	useEffect(() => {
 		if (userID) getUserDetails(membersDispatch, { id: userID });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userID]);
 
 	const membersState = useMembersState();
