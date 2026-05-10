@@ -1,1 +1,7 @@
-cd smarter-tasks && npx lint-staged
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/h"
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root/smarter-tasks" || exit 1
+
+npx lint-staged
