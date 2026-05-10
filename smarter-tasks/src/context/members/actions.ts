@@ -14,7 +14,7 @@ export const fetchMembers = async (dispatch: any) => {
 		});
 		const data = await response.json();
 		dispatch({ type: "FETCH_MEMBERS_SUCCESS", payload: data });
-	} catch (error) {
+	} catch (_error) {
 		dispatch({
 			type: "FETCH_MEMBERS_FAILURE",
 			payload: "Unable to load members",

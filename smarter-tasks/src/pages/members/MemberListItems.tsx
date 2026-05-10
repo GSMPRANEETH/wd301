@@ -7,7 +7,7 @@ import {
 
 export default function MemberListItems() {
 	const dispatchMembers = useMembersDispatch();
-	let state: any = useMembersState();
+	const state: any = useMembersState();
 	const { users, isLoading, isError, errorMessage } = state;
 	if (users.length === 0 && isLoading) {
 		return <tr><td colSpan={4} className="px-8 py-5 text-muted">Loading...</td></tr>;

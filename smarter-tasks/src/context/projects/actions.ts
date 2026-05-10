@@ -14,7 +14,7 @@ export const fetchProjects = async (dispatch: any) => {
 		});
 		const data = await response.json();
 		dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: data });
-	} catch (error) {
+	} catch (_error) {
 		dispatch({
 			type: "FETCH_PROJECTS_FAILURE",
 			payload: "Unable to load projects",

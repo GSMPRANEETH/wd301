@@ -2,7 +2,7 @@ import { useProjectsState } from "../../context/projects/context";
 import { Link } from "react-router-dom";
 
 export default function ProjectListItems() {
-	let state: any = useProjectsState();
+	const state: any = useProjectsState();
 	const { projects, isError, errorMessage } = state;
 	if (isError) {
 		return <span className="text-red-500">{errorMessage}</span>;

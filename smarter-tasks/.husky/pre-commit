@@ -1,0 +1,1 @@
+cd smarter-tasks && npx lint-staged

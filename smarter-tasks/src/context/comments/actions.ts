@@ -31,7 +31,7 @@ export const getComments = async (
 			type: CommentsAvailableActions.FETCH_COMMENTS_SUCCESS,
 			payload: data,
 		});
-	} catch (error) {
+	} catch (_error) {
 		dispatch({
 			type: CommentsAvailableActions.FETCH_COMMENTS_FAILURE,
 			payload: "Error in getting comments",
@@ -66,7 +66,7 @@ export const addComment = async (
 		dispatch({
 			type: CommentsAvailableActions.ADD_COMMENT_SUCCESS,
 		});
-	} catch (error) {
+	} catch (_error) {
 		dispatch({
 			type: CommentsAvailableActions.ADD_COMMENT_FAILURE,
 			payload: "Error in creating comment",

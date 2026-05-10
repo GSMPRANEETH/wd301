@@ -13,7 +13,7 @@ import {
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 const ExportProject: React.FC = () => {
-	let [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(true);
 	const navigate = useNavigate();
 	const { projectID } = useParams();
 

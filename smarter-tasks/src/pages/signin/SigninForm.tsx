@@ -5,8 +5,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 
 const SigninForm: React.FC = () => {
 	type Inputs = {
-		email: String;
-		password: String;
+		email: string;
+		password: string;
 	};
 
 	const {
