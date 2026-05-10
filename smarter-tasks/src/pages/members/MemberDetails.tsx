@@ -13,7 +13,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import type { Member } from "../../context/members/reducer";
 
 const MemberDetails: React.FC = () => {
-	let [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(true);
 	const { userID } = useParams();
 	const navigate = useNavigate();
 	const membersDispatch = useMembersDispatch();
@@ -21,6 +21,7 @@ const MemberDetails: React.FC = () => {
 	// fetch once when userID is available
 	useEffect(() => {
 		if (userID) getUserDetails(membersDispatch, { id: userID });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userID]);
 
 	const membersState = useMembersState();

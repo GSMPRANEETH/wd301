@@ -13,7 +13,7 @@ import {
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 const ExportProject: React.FC = () => {
-	let [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(true);
 	const navigate = useNavigate();
 	const { projectID } = useParams();
 
@@ -36,6 +36,7 @@ const ExportProject: React.FC = () => {
 			await getProjectDetails(projectDispatch, { projectID });
 		}
 		fetchProjectDetails();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [projectID]);
 	const onSubmit: SubmitHandler<Project> = async (data) => {
 		await updateProject(projectDispatch, {

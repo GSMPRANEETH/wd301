@@ -1,0 +1,7 @@
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root/smarter-tasks" || {
+  echo "Error: failed to navigate to smarter-tasks directory" >&2
+  exit 1
+}
+
+npx lint-staged

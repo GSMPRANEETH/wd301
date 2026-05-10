@@ -30,10 +30,10 @@ const formatDateForPicker = (isoDate: string) => {
 };
 
 const TaskDetails = () => {
-	let [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(true);
 
-	let { projectID, taskID } = useParams();
-	let navigate = useNavigate();
+	const { projectID, taskID } = useParams();
+	const navigate = useNavigate();
 	const projectState = useProjectsState();
 	const taskListState = useTasksState();
 	const memberState = useMembersState();
