@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root/smarter-tasks" || {
   echo "Error: failed to navigate to smarter-tasks directory" >&2
