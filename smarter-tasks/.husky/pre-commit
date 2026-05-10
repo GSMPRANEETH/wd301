@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/h"
+. "$(dirname -- "$0")/_/husky.sh"
 
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root/smarter-tasks" || exit 1
